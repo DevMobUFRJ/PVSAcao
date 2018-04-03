@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
 
     Cdados: {
       margin: 30,
-      marginBottom: 200,
+      marginBottom: 100,
     },
 
     TxtInput: {
@@ -71,13 +71,14 @@ const styles = StyleSheet.create({
     },
 
     botao: {
-      height: 30,
+      height: 50,
+      justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: '#616EB2',
     },
 
     Txtbotao: {
-      marginTop: 5,
+      margin: 15,
       fontWeight: 'bold',
       fontSize: 14,
       color: 'white',
