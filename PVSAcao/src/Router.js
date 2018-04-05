@@ -5,10 +5,16 @@ import Principal from './components/Principal';
 import LoginAluno from './components/LoginAluno';
 
 const Rotas = () => (
-    <Router sceneStyle={{}} >
+    <Router>
         <Stack key="root" >
             <Scene key="principal" component={Principal} initial hideNavBar />
-            <Scene key="loginaluno" component={LoginAluno} title="Minhas Perguntas" hideNavBar={false} />
+            <Scene 
+            sceneStyle={{ paddingTop: 50 }}
+            key="loginaluno" component={LoginAluno} title="Minhas Perguntas" hideNavBar={false} 
+            navigationBarStyle={{ backgroundColor: '#3A4A9F' }}
+            titleStyle={{ color: 'white' }}
+            leftButtonIconStyle={{ tintColor: 'white' }}
+            />
         </Stack> 
     </Router>
 );
