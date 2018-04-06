@@ -5,7 +5,7 @@ import {
   View,
   Image,
   TextInput,
-  TouchableHighlight,
+  TouchableOpacity,
 } from 'react-native';
 
 import { Actions } from 'react-native-router-flux';
@@ -27,12 +27,13 @@ export default class Principal extends Component {
           <TextInput style={TxtInput} placeholder="Senha" secureTextEntry />
         </View>
 
-        <TouchableHighlight 
+        <TouchableOpacity
+          activeOpacity={0.9} 
           style={botao}
           onPress={() => { Actions.loginaluno(); }}
         >
           <Text style={Txtbotao} >ENTRAR</Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
       
       </View>
       

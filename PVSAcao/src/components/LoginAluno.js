@@ -3,7 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableHighlight,
+  TouchableOpacity,
   SectionList,
   Alert,
 } from 'react-native';
@@ -12,8 +12,8 @@ import Swipeout from 'react-native-swipeout';
 const direita = [
   {
     text: 'Excluir',
-    backgroundColor: '#FF3B35',
     onPress: () => { Alert.alert('Exclui pergunta'); },
+    type: 'delete',
   }
 ];
 
@@ -30,6 +30,7 @@ export default class LoginAluno extends Component {
               ]}
               renderItem={({ item }) => (
               <View style={listRow} >
+              
                 <Swipeout right={direita} backgroundColor='white' style={containerP} >
                     <View >                  
                         <Text style={perguntasI}>{item}</Text>
@@ -44,9 +45,9 @@ export default class LoginAluno extends Component {
           </View>
 
           <View style={novaPergunta} >
-            <TouchableHighlight style={botao} >
+            <TouchableOpacity activeOpacity={0.9} style={botao} onPress={() => (Alert.alert('Cria nova pergunta.'))} >
               <Text style={txtBotao} >NOVA PERGUNTA</Text>
-              </TouchableHighlight>
+              </TouchableOpacity>
           </View>
         </View>   
     );
