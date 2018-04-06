@@ -5,14 +5,23 @@ import {
   View,
   TouchableHighlight,
   SectionList,
-  Button,
+  Alert,
 } from 'react-native';
+import Swipeout from 'react-native-swipeout';
+
+const direita = [
+  {
+    text: 'Excluir',
+    backgroundColor: '#FF3B35',
+    onPress: () => { Alert.alert('Exclui pergunta'); },
+  }
+];
 
 export default class LoginAluno extends Component {
   render() {
-    const { principal, perguntas, novaPergunta, txtBotao, botao, perguntasI, perguntasH, listRow, btnDelete, txtDelete, pMateria, materiasI } = styles;
-    return (
-        <View style={principal} >
+    const { principal, perguntas, novaPergunta, txtBotao, botao, perguntasI, perguntasH, listRow, materiasI, containerP } = styles;
+    return (       
+        <View style={principal}>
           <View style={perguntas} >
             <SectionList
               sections={[
@@ -21,20 +30,17 @@ export default class LoginAluno extends Component {
               ]}
               renderItem={({ item }) => (
               <View style={listRow} >
-                <TouchableHighlight>
-                  <View>                  
-                      <Text style={perguntasI}>{item}</Text>
-                      <Text style={materiasI} >Matéria</Text>                  
-                  </View>
-                </TouchableHighlight>
-                <TouchableHighlight style={btnDelete} >
-                  <Text style={txtDelete} >X</Text>
-                </TouchableHighlight>
+                <Swipeout right={direita} backgroundColor='white' style={containerP} >
+                    <View >                  
+                        <Text style={perguntasI}>{item}</Text>
+                        <Text style={materiasI} >Matéria</Text>                  
+                    </View>
+                </Swipeout>
               </View>
               )}
               renderSectionHeader={({ section }) => <Text style={perguntasH}>{section.title}</Text>}
               keyExtractor={(item, index) => index}
-            />
+            />             
           </View>
 
           <View style={novaPergunta} >
@@ -56,6 +62,10 @@ const styles = StyleSheet.create({
   perguntas: {
     flex: 10,
     marginTop: 5,
+  },
+
+  containerP: {
+    flex: 1,    
   },
 
   listRow: {
@@ -80,6 +90,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginLeft: 20,
     marginTop: 5,
+    backgroundColor: 'white',
   },
 
   materiasI: {
