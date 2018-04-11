@@ -8,6 +8,8 @@ import {
   Alert,
 } from 'react-native';
 import Swipeout from 'react-native-swipeout';
+import { Actions } from 'react-native-router-flux';
+import ScrollabeTabView from 'react-native-scrollable-tab-view';
 
 const direita = [
   {
@@ -32,10 +34,12 @@ export default class LoginAluno extends Component {
               <View style={listRow} >
               
                 <Swipeout right={direita} backgroundColor='white' style={containerP} >
-                    <View >                  
-                        <Text style={perguntasI}>{item}</Text>
-                        <Text style={materiasI} >Matéria</Text>                  
-                    </View>
+                  <TouchableOpacity activeOpacity={0.9} onPress={() => { Actions.pergunta({ title: item }); }} >
+                      <View >                  
+                          <Text style={perguntasI}>{item}</Text>
+                          <Text style={materiasI} >Matéria</Text>                  
+                      </View>
+                  </TouchableOpacity>
                 </Swipeout>
               </View>
               )}
