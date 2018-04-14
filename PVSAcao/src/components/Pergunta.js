@@ -3,17 +3,14 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
-  TextInput,
-  TouchableOpacity,
 } from 'react-native';
 
 export default class Pergunta extends Component {
   render() {
-    return (
-      <View>
-        <Text>aaaa</Text>
-      </View>
+    return (  
+        <View>
+          <Text>aaaa</Text>
+        </View>
     );
   }
 }

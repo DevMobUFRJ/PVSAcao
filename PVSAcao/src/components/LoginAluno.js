@@ -7,53 +7,60 @@ import {
   SectionList,
   Alert,
 } from 'react-native';
-import Swipeout from 'react-native-swipeout';
 import { Actions } from 'react-native-router-flux';
-import ScrollabeTabView from 'react-native-scrollable-tab-view';
-
-const direita = [
-  {
-    text: 'Excluir',
-    onPress: () => { Alert.alert('Exclui pergunta'); },
-    type: 'delete',
-  }
-];
-
+import ScrollableTabView, { ScrollableTabBar, } from 'react-native-scrollable-tab-view';
 export default class LoginAluno extends Component {
   render() {
-    const { principal, perguntas, novaPergunta, txtBotao, botao, perguntasI, perguntasH, listRow, materiasI, containerP } = styles;
-    return (       
-        <View style={principal}>
-          <View style={perguntas} >
+    const { principal, perguntas, novaPergunta, txtBotao, botao, perguntasI, listRow, materiasI } = styles;
+    return (  
+        <View style={principal} tabLabel='RESPONDIDAS' >
+        <ScrollableTabView renderTabBar={() => <ScrollableTabBar />} >
+        
+          <View style={perguntas} tabLabel='RESPONDIDAS' >
             <SectionList
               sections={[
-              { title: 'Respondidas', data: ['Pergunta 1', 'Pergunta 2', 'Pergunta 3'] },
-              { title: 'Aguardando Resposta', data: ['Pergunta 4'] },
+              { data: ['Pergunta 1', 'Pergunta 2', 'Pergunta 3'] },
               ]}
               renderItem={({ item }) => (
               <View style={listRow} >
-              
-                <Swipeout right={direita} backgroundColor='white' style={containerP} >
                   <TouchableOpacity activeOpacity={0.9} onPress={() => { Actions.pergunta({ title: item }); }} >
                       <View >                  
                           <Text style={perguntasI}>{item}</Text>
                           <Text style={materiasI} >Matéria</Text>                  
                       </View>
                   </TouchableOpacity>
-                </Swipeout>
               </View>
               )}
-              renderSectionHeader={({ section }) => <Text style={perguntasH}>{section.title}</Text>}
               keyExtractor={(item, index) => index}
             />             
           </View>
 
+          <View style={perguntas} tabLabel='AGUARDANDO' >
+            <SectionList
+              sections={[
+              { data: ['Pergunta 4', 'Pergunta 5', 'Pergunta 6'] },
+              ]}
+              renderItem={({ item }) => (
+              <View style={listRow} >
+                  <TouchableOpacity activeOpacity={0.9} onPress={() => { Actions.pergunta({ title: item }); }} >
+                      <View >                  
+                          <Text style={perguntasI}>{item}</Text>
+                          <Text style={materiasI} >Matéria</Text>                  
+                      </View>
+                  </TouchableOpacity>
+              </View>
+              )}
+              keyExtractor={(item, index) => index}
+            />             
+          </View>
+
+      </ScrollableTabView>   
           <View style={novaPergunta} >
             <TouchableOpacity activeOpacity={0.9} style={botao} onPress={() => (Alert.alert('Cria nova pergunta.'))} >
               <Text style={txtBotao} >NOVA PERGUNTA</Text>
               </TouchableOpacity>
           </View>
-        </View>   
+        </View>
     );
   }
 }
@@ -69,25 +76,9 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
 
-  containerP: {
-    flex: 1,    
-  },
-
   listRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },
-
-  txtDelete: {
-    color: 'black',
-  },
-
-  btnDelete: {
-    fontSize: 14,
-    marginLeft: 20,
-    marginTop: 5,
-    marginBottom: 5,
-    marginRight: 20,
   },
 
   perguntasI: {
@@ -104,17 +95,8 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
 
-  perguntasH: {
-    lineHeight: 30,
-    borderBottomColor: '#9BAAAD',
-    borderBottomWidth: 1,
-    color: '#9BAAAD',
-    fontSize: 16,
-    marginLeft: 10,
-  },
-
   novaPergunta: {
-    flex: 1,
+    flex: 0.1,
   },
 
   botao: {
