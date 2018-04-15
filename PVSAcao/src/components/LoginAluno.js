@@ -9,13 +9,14 @@ import {
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import ScrollableTabView, { ScrollableTabBar, } from 'react-native-scrollable-tab-view';
+
 export default class LoginAluno extends Component {
   render() {
     const { principal, perguntas, novaPergunta, txtBotao, botao, perguntasI, listRow, materiasI } = styles;
     return (  
         <View style={principal} tabLabel='RESPONDIDAS' >
         <ScrollableTabView renderTabBar={() => <ScrollableTabBar />} >
-        
+
           <View style={perguntas} tabLabel='RESPONDIDAS' >
             <SectionList
               sections={[
