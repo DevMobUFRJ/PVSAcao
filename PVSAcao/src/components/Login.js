@@ -30,7 +30,7 @@ export default class Principal extends Component {
         <TouchableOpacity
           activeOpacity={0.9} 
           style={botao}
-          onPress={() => { Actions.loginaluno(); }}
+          onPress={() => { Actions.homealuno(); }}
         >
           <Text style={Txtbotao} >ENTRAR</Text>
         </TouchableOpacity>

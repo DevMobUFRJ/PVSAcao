@@ -24,7 +24,7 @@ export default class LoginAluno extends Component {
               ]}
               renderItem={({ item }) => (
               <View style={listRow} >
-                  <TouchableOpacity activeOpacity={0.9} onPress={() => { Actions.pergunta({ title: item }); }} >
+                  <TouchableOpacity activeOpacity={0.9} onPress={() => { Actions.perguntacreate({ title: item }); }} >
                       <View >                  
                           <Text style={perguntasI}>{item}</Text>
                           <Text style={materiasI} >Matéria</Text>                  
@@ -43,7 +43,7 @@ export default class LoginAluno extends Component {
               ]}
               renderItem={({ item }) => (
               <View style={listRow} >
-                  <TouchableOpacity activeOpacity={0.9} onPress={() => { Actions.pergunta({ title: item }); }} >
+                  <TouchableOpacity activeOpacity={0.9} onPress={() => { Actions.perguntacreate({ title: item }); }} >
                       <View >                  
                           <Text style={perguntasI}>{item}</Text>
                           <Text style={materiasI} >Matéria</Text>                  

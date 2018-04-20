@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-const alunoI = require('../imgs/ic_people_black_24dp.png');
-const turmaI = require('../imgs/ic_school_black_24dp.png');
-const monitorI = require('../imgs/ic_person_black_24dp.png');
+const alunoI = require('../imgs/icons/ic_people_black_24dp.png');
+const turmaI = require('../imgs/icons/ic_school_black_24dp.png');
+const monitorI = require('../imgs/icons/ic_person_black_24dp.png');
 
 export default class InfoPergunta extends Component {
   render() {

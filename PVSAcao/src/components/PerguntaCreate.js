@@ -18,7 +18,7 @@ export default class Pergunta extends Component {
           <KeyboardAvoidingView behavior='height' style={bottomchat}>
             <TextInput style={txtInput} underlineColorAndroid="white" />
             <TouchableOpacity style={btnEnviar} >
-              <Image style={imgEnviar} source={require('../imgs/ic_send_white_24dp.png')} />
+              <Image style={imgEnviar} source={require('../imgs/icons/ic_send_white_24dp.png')} />
             </TouchableOpacity>
           </KeyboardAvoidingView>
 
