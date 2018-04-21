@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import { Actions } from 'react-native-router-flux';
+import * as firebase from "firebase";
 
 const logo = require('../imgs/pvsacao-simple.png');
 
@@ -91,3 +92,36 @@ const styles = StyleSheet.create({
     },
   
 });
+
+firebase.initializeApp({
+    apiKey: process.env.PVS_FIREBASE_API_KEY || "***REMOVED***",
+    authDomain: "pvs-acao.firebaseapp.com",
+    databaseURL: "https://pvs-acao.firebaseio.com",
+    projectId: "pvs-acao",
+    storageBucket: "pvs-acao.appspot.com",
+    messagingSenderId: process.env.PVS_SENDER_ID || ***REMOVED***
+});
+
+function register(email, password){
+    try{
+        firebase.auth().createUserWithEmailAndPassword(email, password);
+        console.log("Account created");
+    } catch (error) {
+        console.log(error.toString())
+    }
+
+}
+
+function login(email, pass) {
+
+    try {
+        firebase.auth().signInWithEmailAndPassword(email, pass);
+        console.log("Logged In!");
+
+        // Navigate to the Home page
+
+    } catch (error) {
+        console.log(error.toString())
+    }
+
+}
