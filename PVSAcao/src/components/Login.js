@@ -9,11 +9,58 @@ import {
 } from 'react-native';
 
 import { Actions } from 'react-native-router-flux';
-import * as firebase from "firebase";
+import firebase from "firebase";
 
 const logo = require('../imgs/pvsacao-simple.png');
 
 export default class Principal extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = { email: '', senha: ''};
+
+    this.registerUser = this.registerUser.bind();
+    this.registerUser = this.registerUser.bind();
+  }
+
+  componentWillMount() {
+    firebase.initializeApp({
+      apiKey: process.env.PVS_FIREBASE_API_KEY || "***REMOVED***",
+      authDomain: "pvs-acao.firebaseapp.com",
+      databaseURL: "https://pvs-acao.firebaseio.com",
+      projectId: "pvs-acao",
+      storageBucket: "pvs-acao.appspot.com",
+      messagingSenderId: process.env.PVS_SENDER_ID || ***REMOVED***
+  });
+  }
+
+  registerUser() {
+    var email = 'emailteste@gmail.com';
+    var senha = 'senhateste123';
+
+    const user = firebase.auth();
+
+    user.createUserWithEmailAndPassword(email, senha).catch(
+      (erro) => {
+        alert(erro.message);
+      }
+    );
+  }
+
+  loginUser() {
+    var email = 'emailteste@gmail.com';
+    var senha = 'senhateste123';
+    
+    const user = firebase.auth();
+
+    user.signInWithEmailAndPassword(email, senha).catch(
+      (erro) => {
+        alert(erro.message);
+      }
+    );
+  }
+
   render() {
     const { container, img, texto, VLogo, Cdados, TxtInput, botao, Txtbotao } = styles;
     return (
@@ -24,7 +71,7 @@ export default class Principal extends Component {
         </View>
 
         <View style={Cdados} >
-          <TextInput style={TxtInput} placeholder="Login" />
+          <TextInput style={TxtInput} placeholder="Email" />
           <TextInput style={TxtInput} placeholder="Senha" secureTextEntry />
         </View>
 
@@ -92,36 +139,3 @@ const styles = StyleSheet.create({
     },
   
 });
-
-firebase.initializeApp({
-    apiKey: process.env.PVS_FIREBASE_API_KEY || "***REMOVED***",
-    authDomain: "pvs-acao.firebaseapp.com",
-    databaseURL: "https://pvs-acao.firebaseio.com",
-    projectId: "pvs-acao",
-    storageBucket: "pvs-acao.appspot.com",
-    messagingSenderId: process.env.PVS_SENDER_ID || ***REMOVED***
-});
-
-function register(email, password){
-    try{
-        firebase.auth().createUserWithEmailAndPassword(email, password);
-        console.log("Account created");
-    } catch (error) {
-        console.log(error.toString())
-    }
-
-}
-
-function login(email, pass) {
-
-    try {
-        firebase.auth().signInWithEmailAndPassword(email, pass);
-        console.log("Logged In!");
-
-        // Navigate to the Home page
-
-    } catch (error) {
-        console.log(error.toString())
-    }
-
-}
