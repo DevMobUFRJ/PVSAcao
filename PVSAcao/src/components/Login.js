@@ -9,16 +9,20 @@ import {
 } from 'react-native';
 
 import { Actions } from 'react-native-router-flux';
-import firebase from "firebase";
+//import firebase, { firestore } from "firebase";
+
+const firebase = require('firebase');
+require('firebase/firestore');
 
 const logo = require('../imgs/pvsacao-simple.png');
+
 
 export default class Principal extends Component {
 
   constructor(props) {
     super(props);
 
-    this.state = { email: '', senha: ''};
+    this.state = { email: '', password: ''};
 
     this.registerUser = this.registerUser.bind(this);
     this.loginUser = this.loginUser.bind(this);
@@ -36,12 +40,13 @@ export default class Principal extends Component {
   }
 
   registerUser() {
-    var email = 'emailteste@gmail.com';
-    var senha = 'senhateste123';
+    //ainda não implementado    
+    var email = this.state.email;
+    var password = this.state.password;
 
     const user = firebase.auth();
 
-    user.createUserWithEmailAndPassword(email, senha).catch(
+    user.createUserWithEmailAndPassword(email, password).catch(
       (erro) => {
         alert(erro.message);
       }
@@ -50,24 +55,54 @@ export default class Principal extends Component {
 
   loginUser() {
     var email = this.state.email;
-    var senha = this.state.senha;
-
-    //alert(this.state.senha);
-    
+    var password = this.state.password;
     const user = firebase.auth();
     var msgErro = '';
+    
+    var db = firebase.firestore().collection('usuarios').doc(email);     
 
-    user.signInWithEmailAndPassword(email, senha).then(
-      () => {
-        Actions.homealuno();
+    db.get().then(
+      (doc) => {
+        if (doc.exists) {
+          //console.log(doc.data().tipo);
+          const tipo = doc.data().tipo;
+
+          user.signInWithEmailAndPassword(email, password).then(
+            () => {
+              if (tipo == "aluno") {
+                console.log("Tipo de login é aluno!");
+                Actions.homealuno();
+              } else if (tipo == 'monitor') {
+                console.log("Tipo de login é monitor!");
+                //Actions.homemonitor();
+              }        
+            }
+          )
+          .catch(
+            (erro) => {
+              msgErro = erro.message;
+              console.log(msgErro);
+            }
+          );
+
+        } else {
+          alert('Email não encontrado!');
+        }
+
+      }
+    ).catch(
+      (erro) => {
+        console.log(erro);
       }
     )
-    .catch(
-      (erro) => {
-        msgErro = erro.message;
-        alert(msgErro);
-      }
-    );
+
+    
+
+    
+    
+   
+
+    
   }
 
   render() {
@@ -80,14 +115,20 @@ export default class Principal extends Component {
         </View>
 
         <View style={Cdados} >
-          <TextInput style={TxtInput} placeholder="Email" onChangeText={(e) => {this.setState({ email: e});}} />
-          <TextInput style={TxtInput} placeholder="Senha" secureTextEntry onChangeText={(s) => {this.setState({ senha: s});}} />
+          <TextInput style={TxtInput} placeholder="Email" keyboardType='email-address' onChangeText={(e) => {this.setState({ email: e});}} />
+          <TextInput style={TxtInput} placeholder="Senha" secureTextEntry onChangeText={(s) => {this.setState({ password: s});}} />
         </View>
 
         <TouchableOpacity
           activeOpacity={0.9} 
           style={botao}
-          onPress={() => { this.loginUser(); /*Actions.homealuno();*/ }}
+          onPress={
+            () => { 
+              if ( this.state.email == '' ) {
+                alert('Email vazio!');
+              } else { this.loginUser(); } 
+            }
+          }
         >
           <Text style={Txtbotao} >ENTRAR</Text>
         </TouchableOpacity>
