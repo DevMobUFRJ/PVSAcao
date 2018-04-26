@@ -20,8 +20,8 @@ export default class Principal extends Component {
 
     this.state = { email: '', senha: ''};
 
-    this.registerUser = this.registerUser.bind();
-    this.registerUser = this.registerUser.bind();
+    this.registerUser = this.registerUser.bind(this);
+    this.loginUser = this.loginUser.bind(this);
   }
 
   componentWillMount() {
@@ -49,14 +49,23 @@ export default class Principal extends Component {
   }
 
   loginUser() {
-    var email = 'emailteste@gmail.com';
-    var senha = 'senhateste123';
+    var email = this.state.email;
+    var senha = this.state.senha;
+
+    //alert(this.state.senha);
     
     const user = firebase.auth();
+    var msgErro = '';
 
-    user.signInWithEmailAndPassword(email, senha).catch(
+    user.signInWithEmailAndPassword(email, senha).then(
+      () => {
+        Actions.homealuno();
+      }
+    )
+    .catch(
       (erro) => {
-        alert(erro.message);
+        msgErro = erro.message;
+        alert(msgErro);
       }
     );
   }
@@ -71,14 +80,14 @@ export default class Principal extends Component {
         </View>
 
         <View style={Cdados} >
-          <TextInput style={TxtInput} placeholder="Email" />
-          <TextInput style={TxtInput} placeholder="Senha" secureTextEntry />
+          <TextInput style={TxtInput} placeholder="Email" onChangeText={(e) => {this.setState({ email: e});}} />
+          <TextInput style={TxtInput} placeholder="Senha" secureTextEntry onChangeText={(s) => {this.setState({ senha: s});}} />
         </View>
 
         <TouchableOpacity
           activeOpacity={0.9} 
           style={botao}
-          onPress={() => { Actions.homealuno(); }}
+          onPress={() => { this.loginUser(); /*Actions.homealuno();*/ }}
         >
           <Text style={Txtbotao} >ENTRAR</Text>
         </TouchableOpacity>
