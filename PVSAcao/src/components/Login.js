@@ -29,14 +29,16 @@ export default class Principal extends Component {
   }
 
   componentWillMount() {
-    firebase.initializeApp({
-      apiKey: process.env.PVS_FIREBASE_API_KEY || "***REMOVED***",
-      authDomain: "pvs-acao.firebaseapp.com",
-      databaseURL: "https://pvs-acao.firebaseio.com",
-      projectId: "pvs-acao",
-      storageBucket: "pvs-acao.appspot.com",
-      messagingSenderId: process.env.PVS_SENDER_ID || ***REMOVED***
-  });
+    if(!firebase.apps.length) {
+        firebase.initializeApp({
+          apiKey: process.env.PVS_FIREBASE_API_KEY || "***REMOVED***",
+          authDomain: "pvs-acao.firebaseapp.com",
+          databaseURL: "https://pvs-acao.firebaseio.com",
+          projectId: "pvs-acao",
+          storageBucket: "pvs-acao.appspot.com",
+          messagingSenderId: process.env.PVS_SENDER_ID || ***REMOVED***
+      });
+    }
   }
 
   registerUser() {
@@ -71,7 +73,7 @@ export default class Principal extends Component {
             () => {
               if (tipo == "aluno") {
                 console.log("Tipo de login é aluno!");
-                Actions.homealuno();
+                Actions.homealuno({ email: this.state.email});
               } else if (tipo == 'monitor') {
                 console.log("Tipo de login é monitor!");
                 //Actions.homemonitor();
@@ -94,15 +96,7 @@ export default class Principal extends Component {
       (erro) => {
         console.log(erro);
       }
-    )
-
-    
-
-    
-    
-   
-
-    
+    )    
   }
 
   render() {

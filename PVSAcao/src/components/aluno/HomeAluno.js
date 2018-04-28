@@ -10,24 +10,86 @@ import {
 import { Actions } from 'react-native-router-flux';
 import ScrollableTabView, { ScrollableTabBar, } from 'react-native-scrollable-tab-view';
 
+const firebase = require('firebase');
+require('firebase/firestore');
+
 export default class LoginAluno extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = { 
+      fetch: false,
+      email: this.props.email,
+      questionsA: [],
+      questionsW: [],
+      materiasA: []
+     };
+  } 
+
+ componentWillMount() {
+    if (!firebase.apps.length) {
+        firebase.initializeApp({
+          apiKey: process.env.PVS_FIREBASE_API_KEY || "***REMOVED***",
+          authDomain: "pvs-acao.firebaseapp.com",
+          databaseURL: "https://pvs-acao.firebaseio.com",
+          projectId: "pvs-acao",
+          storageBucket: "pvs-acao.appspot.com",
+          messagingSenderId: process.env.PVS_SENDER_ID || ***REMOVED***
+      });      
+    }
+    console.log('Entrou no metodo!');
+    const ref = firebase.firestore().collection('perguntas');
+    const queryA = ref.where('aluno', '==', this.state.email).where('respondida', '==', true);
+    const queryB = ref.where('aluno', '==', this.state.email).where('respondida', '==', false);
+
+    queryA.get().then(
+      (querySnap) => {
+        querySnap.forEach((doc) => {
+          console.log(doc.id, '=>', doc.data());
+          const perguntaR = this.state.questionsA.concat(doc.data().titulo);
+          //const matR = this.state.questionsA.concat(doc.data().materia);
+          //this.setState({ materiasA: matR });
+          this.setState({ questionsA: perguntaR });
+        });
+        console.log(this.state.questionsA);
+        this.setState({ fetch: true });
+        console.log(this.state.fetch);
+      }      
+    );
+
+    queryB.get().then(
+      (querySnap) => {
+        querySnap.forEach((doc) => {
+          console.log(doc.id, '=>', doc.data());
+          const perguntaE = this.state.questionsW.concat(doc.data().titulo);
+          this.setState({ questionsW: perguntaE });
+        });
+        console.log(this.state.questionsW);
+        this.setState({ fetch: true });
+        console.log(this.state.fetch);
+      }
+    );
+  } 
+
   render() {
+    if (!this.state.fetch) { return <Text>CARREGANDO</Text>; }
     const { principal, perguntas, novaPergunta, txtBotao, botao, perguntasI, listRow, materiasI } = styles;
     return (  
-        <View style={principal} tabLabel='RESPONDIDAS' >
+        <View style={principal} >
         <ScrollableTabView renderTabBar={() => <ScrollableTabBar />} >
 
           <View style={perguntas} tabLabel='RESPONDIDAS' >
             <SectionList
               sections={[
-              { data: ['Pergunta 1', 'Pergunta 2', 'Pergunta 3'] },
+              { data: this.state.questionsA },
               ]}
               renderItem={({ item }) => (
               <View style={listRow} >
                   <TouchableOpacity activeOpacity={0.9} onPress={() => { Actions.perguntacreate({ title: item }); }} >
                       <View >                  
                           <Text style={perguntasI}>{item}</Text>
-                          <Text style={materiasI} >Matéria</Text>                  
+                          <Text style={materiasI}>Matéria</Text>                  
                       </View>
                   </TouchableOpacity>
               </View>
@@ -39,7 +101,7 @@ export default class LoginAluno extends Component {
           <View style={perguntas} tabLabel='AGUARDANDO' >
             <SectionList
               sections={[
-              { data: ['Pergunta 4', 'Pergunta 5', 'Pergunta 6'] },
+              { data: this.state.questionsW },
               ]}
               renderItem={({ item }) => (
               <View style={listRow} >
@@ -80,6 +142,10 @@ const styles = StyleSheet.create({
   listRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+
+  btnPergunta: {
+    flex: 1,
   },
 
   perguntasI: {
