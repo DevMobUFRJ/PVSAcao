@@ -17,7 +17,7 @@ require('firebase/firestore');
 const logo = require('../imgs/pvsacao-simple.png');
 
 
-export default class Principal extends Component {
+export default class Login extends Component {
 
   constructor(props) {
     super(props);
@@ -76,7 +76,7 @@ export default class Principal extends Component {
                 Actions.homealuno({ email: this.state.email});
               } else if (tipo == 'monitor') {
                 console.log("Tipo de login é monitor!");
-                //Actions.homemonitor();
+                Actions.homemonitor({ email: this.state.email, materia: doc.data().materia});
               }        
             }
           )

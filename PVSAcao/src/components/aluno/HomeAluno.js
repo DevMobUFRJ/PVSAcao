@@ -13,7 +13,7 @@ import ScrollableTabView, { ScrollableTabBar, } from 'react-native-scrollable-ta
 const firebase = require('firebase');
 require('firebase/firestore');
 
-export default class LoginAluno extends Component {
+export default class HomeAluno extends Component {
 
   constructor(props) {
     super(props);
@@ -36,7 +36,7 @@ export default class LoginAluno extends Component {
           projectId: "pvs-acao",
           storageBucket: "pvs-acao.appspot.com",
           messagingSenderId: process.env.PVS_SENDER_ID || ***REMOVED***
-      });      
+      });
     }
     console.log('Entrou no metodo!');
     const ref = firebase.firestore().collection('perguntas');
