@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   SectionList,
   Alert,
+  ActivityIndicator
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import ScrollableTabView, { ScrollableTabBar, } from 'react-native-scrollable-tab-view';
@@ -73,7 +74,13 @@ export default class HomeAluno extends Component {
   } 
 
   render() {
-    if (!this.state.fetch) { return <Text>CARREGANDO</Text>; }
+    if (!this.state.fetch) { 
+      return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
+          <ActivityIndicator size='large' color="#616EB2" />
+        </View>
+      ); 
+    }
     const { principal, perguntas, novaPergunta, txtBotao, botao, perguntasI, listRow, materiasI } = styles;
     return (  
         <View style={principal} >

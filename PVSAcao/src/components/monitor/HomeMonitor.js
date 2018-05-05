@@ -4,7 +4,8 @@ import {
     Text,
     View,
     TouchableOpacity,
-    SectionList
+    SectionList,
+    ActivityIndicator
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import ScrollableTabView, { ScrollableTabBar, } from 'react-native-scrollable-tab-view';
@@ -28,7 +29,6 @@ export default class HomeMonitor extends Component {
     }
 
     componentWillMount() {
-
         if(!firebase.apps.length) {
             firebase.initializeApp({
                 apiKey: process.env.PVS_FIREBASE_API_KEY || "***REMOVED***",
@@ -73,8 +73,14 @@ export default class HomeMonitor extends Component {
     }
 
     render() {
-        if (!this.state.fetch) { return <Text>CARREGANDO</Text>; }
-        const { principal, perguntas, novaPergunta, txtBotao, botao, perguntasI, listRow, materiasI } = styles;
+        if (!this.state.fetch) { 
+            return (
+              <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
+                <ActivityIndicator size='large' color="#616EB2" />
+              </View>
+            ); 
+          }
+        const { principal, perguntas, perguntasI, listRow, materiasI } = styles;
         return (
             <View style={principal} >
                 <ScrollableTabView renderTabBar={() => <ScrollableTabBar />} >

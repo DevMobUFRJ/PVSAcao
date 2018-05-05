@@ -6,14 +6,12 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
-
 import { Actions } from 'react-native-router-flux';
-//import firebase, { firestore } from "firebase";
-
+import Modal from 'react-native-modal';
 const firebase = require('firebase');
 require('firebase/firestore');
-
 const logo = require('../imgs/pvsacao-simple.png');
 
 
@@ -22,7 +20,7 @@ export default class Login extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { email: '', password: ''};
+    this.state = { email: '', password: '', isVisible: false };
 
     this.registerUser = this.registerUser.bind(this);
     this.loginUser = this.loginUser.bind(this);
@@ -56,6 +54,7 @@ export default class Login extends Component {
   }
 
   loginUser() {
+    this.setState({ isVisible: true });
     var email = this.state.email;
     var password = this.state.password;
     const user = firebase.auth();
@@ -71,6 +70,7 @@ export default class Login extends Component {
 
           user.signInWithEmailAndPassword(email, password).then(
             () => {
+              this.setState({ isVisible: false });              
               if (tipo == "aluno") {
                 console.log("Tipo de login é aluno!");
                 Actions.homealuno({ email: this.state.email});
@@ -82,27 +82,32 @@ export default class Login extends Component {
           )
           .catch(
             (erro) => {
+              this.setState({ isVisible: false });
               msgErro = erro.message;
               console.log(msgErro);
             }
           );
-
         } else {
+          this.setState({ isVisible: false });
           alert('Email não encontrado!');
         }
-
       }
     ).catch(
       (erro) => {
         console.log(erro);
       }
-    )    
+    );    
   }
 
   render() {
     const { container, img, texto, VLogo, Cdados, TxtInput, botao, Txtbotao } = styles;
     return (
       <View style={container} >
+        <Modal isVisible={this.state.isVisible} animationInTiming={1} >
+          <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', }} >
+            <ActivityIndicator size='large' color='white' />
+          </View>
+        </Modal>
         <View style={VLogo} >
           <Image style={img} source={logo} />
           <Text style={texto} >Pré Vestibular Social</Text>
