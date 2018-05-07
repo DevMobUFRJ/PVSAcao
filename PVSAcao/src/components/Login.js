@@ -83,10 +83,9 @@ export default class Login extends Component {
                 alert(msgErro);
             }
         );
-
     }
 
-    loginFinalStep(email){
+    loginFinalStep(email) {
         var db = firebase.firestore().collection('usuarios').doc(email);
         var msgErro = '';
 
@@ -95,18 +94,17 @@ export default class Login extends Component {
                 if (doc.exists) {
                     //console.log(doc.data().tipo);
                     const tipo = doc.data().tipo;
-                    this.setState({isVisible: false});
+                    this.setState({isVisible: false });
 
                     if (tipo == "aluno") {
-                        console.log("Tipo de login é aluno!");
-                        Actions.homealuno({email: this.state.email});
+                        console.log("Tipo de login é aluno!", email);
+                        Actions.homealuno({ email });
                     } else if (tipo == 'monitor') {
                         console.log("Tipo de login é monitor!");
-                        Actions.homemonitor({email: this.state.email, materia: doc.data().materia});
+                        Actions.homemonitor({ email, materia: doc.data().materia });
                     }
-
                 } else {
-                    this.setState({isVisible: false});
+                    this.setState({ isVisible: false });
                     alert('Email não encontrado!');
                 }
             }
