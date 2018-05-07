@@ -116,7 +116,7 @@ export default class Login extends Component {
     }
 
     render() {
-        const {container, img, texto, VLogo, Cdados, TxtInput, botao, Txtbotao} = styles;
+        const {container, img, texto, VLogo, Cdados, TxtInput, botao, Txtbotao } = styles;
         return (
             <View style={container}>
                 <Modal isVisible={this.state.isVisible} animationInTiming={1}>
@@ -130,12 +130,16 @@ export default class Login extends Component {
                 </View>
 
                 <View style={Cdados}>
-                    <TextInput style={TxtInput} placeholder="Email" keyboardType='email-address' onChangeText={(e) => {
-                        this.setState({email: e});
-                    }}/>
-                    <TextInput style={TxtInput} placeholder="Senha" secureTextEntry onChangeText={(s) => {
-                        this.setState({password: s});
-                    }}/>
+                    <TextInput style={TxtInput} placeholder="Email" keyboardType='email-address' 
+                        onChangeText={(e) => {
+                            this.setState({ email: e });
+                        }}
+                    />
+                    <TextInput style={TxtInput} placeholder="Senha" secureTextEntry 
+                        onChangeText={(s) => {
+                            this.setState({ password: s });
+                        }}
+                    />
                 </View>
 
                 <TouchableOpacity

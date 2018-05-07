@@ -116,15 +116,16 @@ export default class HomeAluno extends Component {
         </View>
       ); 
     }    
-    const { principal, perguntas, novaPergunta, txtBotao, botao, perguntasI, listRow, materiasI, modalTexts } = styles;
+    const { principal, perguntas, novaPergunta, txtBotao, botao, perguntasI, listRow, materiasI, modalTexts, modalInput, modalButtons, containerButtons } = styles;
     return (  
         <View style={principal} >
         
         <Modal isVisible={this.state.isVisible} animationInTiming={300} >
-          <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', backgroundColor: 'white' }} >
+          <View style={{ justifyContent: 'center', alignContent: 'center', backgroundColor: 'white', height: 250  }} >
             <View style={modalTexts}>
-              <TextInput placeholder='Titulo' onChangeText={(t) => { this.setState({ questionTitle: t }); }} />
-              <Picker mode='dropdown' 
+              <TextInput style={modalInput} placeholder='Titulo da pergunta' onChangeText={(t) => { this.setState({ questionTitle: t }); }} />
+              <Picker style={modalInput} 
+                mode='dropdown' 
                 selectedValue={this.state.questionClass} 
                 onValueChange={(itemValue, itemIndex) => {
                   this.setState({ questionClass: itemValue });
@@ -134,8 +135,14 @@ export default class HomeAluno extends Component {
                 <Picker.Item label='Matematica' value='matematica' />
               </Picker>
             </View>
-            <Button onPress={() => this.newQuestion()} title='Enviar' />
-            <Button onPress={() => this.setState({ isVisible: false })} title='Fechar' />
+            <View style={containerButtons}>
+              <TouchableOpacity style={modalButtons} activeOpacity={0.9} onPress={() => this.setState({ isVisible: false })} >
+                <Text style={{ color: 'white' }} >FECHAR</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={modalButtons} activeOpacity={0.9} onPress={() => this.newQuestion()}>
+                <Text style={{ color: 'white' }} >ENVIAR</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </Modal>        
         <ScrollableTabView renderTabBar={() => <ScrollableTabBar />} >
@@ -238,6 +245,28 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     color: 'white',
+  },
+
+  containerButtons: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center', 
+  },
+
+  modalButtons: {
+    margin: 10,
+    backgroundColor: '#616EB2',
+    borderRadius: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 30,
+    width: 80,
+  }, 
+
+  modalInput: {
+    marginBottom: 10,
+    marginLeft: 20,
+    marginRight: 20,
   },
   
 });
