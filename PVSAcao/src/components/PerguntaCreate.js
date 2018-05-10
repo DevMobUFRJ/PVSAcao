@@ -1,76 +1,71 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  TextInput,
-  View,
-  TouchableOpacity,
-  Image,
-  KeyboardAvoidingView
-} from 'react-native';
+import { StyleSheet, } from 'react-native';
+import { GiftedChat } from 'react-native-gifted-chat';
+
+const firebase = require('firebase');
+require('firebase/firestore');
 
 export default class Pergunta extends Component {
-  render() {
-    const { chat, txtInput, principal, bottomchat, btnEnviar, imgEnviar } = styles;
-    return (  
-        <View style={principal} >
-          <View style={chat} />
-          
-          <KeyboardAvoidingView behavior='height' style={bottomchat}>
-            <TextInput style={txtInput} underlineColorAndroid="white" />
-            <TouchableOpacity style={btnEnviar} >
-              <Image style={imgEnviar} source={require('../imgs/icons/ic_send_white_24dp.png')} />
-            </TouchableOpacity>
-          </KeyboardAvoidingView>
+  constructor(props) {
+    super(props);
 
-        </View>
+    this.state = {
+      emailAluno: this.props.emailAluno,
+      emailMonitor: '',
+      messages: [],
+    };
+  }
+
+  componentWillMount() {
+    if (!firebase.apps.length) {
+      firebase.initializeApp({
+          apiKey: process.env.PVS_FIREBASE_API_KEY || "***REMOVED***",
+          authDomain: "pvs-acao.firebaseapp.com",
+          databaseURL: "https://pvs-acao.firebaseio.com",
+          projectId: "pvs-acao",
+          storageBucket: "pvs-acao.appspot.com",
+          messagingSenderId: process.env.PVS_SENDER_ID || ***REMOVED***
+      });
+    }
+
+    const ref = firebase.firestore().collection('chats');
+    const queryMessages = ref.where('aluno', '==', this.state.emailAluno).where('titulo', '==', this.props.title);
+
+    queryMessages.get().then(
+      (querySnap) => {
+        querySnap.forEach((doc) => {
+          console.log(doc.id, '=>', doc.data());
+        });
+      }      
+    );
+
+    this.setState({
+      messages: [
+        {          
+          user: {
+            id: 2,
+            name: 'Jõaozinho',
+            avatar: require('../imgs/pvsacao-simple.png'),
+          },
+        },
+      ],
+    });
+  }
+
+  onSend(messages = []) {
+    this.setState(previousState => ({
+      messages: GiftedChat.append(previousState.messages, messages)
+    }));
+  }
+
+  render() {    
+    return (  
+        <GiftedChat placeholder='Escreva sua mensagem...' messages={this.state.messages} onSend={messages => this.onSend(messages)} user={{ id: 1 }} />
     );
   }
 }
 
 const styles = StyleSheet.create({
-
-  principal: {
-    flex: 1,
-    backgroundColor: '#D6FBFF',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
-
-  chat: {
-    flex: 10,
-  },
-
-  bottomchat: {
-    flex: 1,
-    flexDirection: 'row',
-    marginBottom: 1,
-  },
-
-  txtInput: {
-    flex: 10,
-    backgroundColor: 'white',
-    borderRadius: 50,  
-    height: 40,
-    margin: 5,
-    borderWidth: 1,
-    borderColor: 'gray',
-  },
-
-  imgEnviar: {
-    resizeMode: 'contain',
-    width: 30,
-    height: 30
-  },
   
-  btnEnviar: {
-    flex: 1,
-    backgroundColor: '#3A4A9F',
-    borderRadius: 100,
-    justifyContent: 'center',
-    width: 40,
-    height: 40,
-    marginTop: 5,
-    alignItems: 'center',
-  },
   
 });

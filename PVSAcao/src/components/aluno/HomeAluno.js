@@ -154,7 +154,7 @@ export default class HomeAluno extends Component {
               ]}
               renderItem={({ item }) => (
               <View style={listRow} >
-                  <TouchableOpacity activeOpacity={0.9} onPress={() => { Actions.perguntacreate({ title: item }); }} >
+                  <TouchableOpacity style={{ flex: 1 }} activeOpacity={0.5} onPress={() => { Actions.perguntacreate({ title: item, emailAluno: this.state.email }); }} >
                       <View >                  
                           <Text style={perguntasI}>{item}</Text>
                           <Text style={materiasI}>Matéria</Text>                  
@@ -173,7 +173,7 @@ export default class HomeAluno extends Component {
               ]}
               renderItem={({ item }) => (
               <View style={listRow} >
-                  <TouchableOpacity activeOpacity={0.9} onPress={() => { Actions.perguntacreate({ title: item }); }} >
+                  <TouchableOpacity style={{ flex: 1 }} activeOpacity={0.5} onPress={() => { Actions.perguntacreate({ title: item, emailAluno: this.state.email }); }} >
                       <View >                  
                           <Text style={perguntasI}>{item}</Text>
                           <Text style={materiasI} >Matéria</Text>                  

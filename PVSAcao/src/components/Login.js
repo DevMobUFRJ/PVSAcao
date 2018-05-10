@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     StyleSheet,
     Text,
@@ -8,7 +8,7 @@ import {
     TouchableOpacity,
     ActivityIndicator
 } from 'react-native';
-import {Actions} from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 import Modal from 'react-native-modal';
 
 const firebase = require('firebase');
@@ -21,7 +21,7 @@ export default class Login extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {email: '', password: '', isVisible: false};
+        this.state = { email: '', password: '', isVisible: false };
 
         this.registerUser = this.registerUser.bind(this);
         this.loginUser = this.loginUser.bind(this);
