@@ -104,6 +104,9 @@ export default class Login extends Component {
                     } else if (tipo == 'monitor') {
                         console.log("Tipo de login é monitor!");
                         Actions.homemonitor({email, materia: doc.data().materia});
+                    } else if (tipo == 'admin') {
+                        console.log("Tipo de login é admin!");
+                        Actions.homeadmin({email});
                     }
                 } else {
                     this.setState({isVisible: false});
