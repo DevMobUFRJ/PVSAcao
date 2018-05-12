@@ -28,7 +28,9 @@ export default class Pergunta extends Component {
       });
     }
 
-    const ref = firebase.firestore().collection('chats');
+    const firestore = firebase.firestore();
+    firestore.settings({ timestampsInSnapshots: true });
+    const ref = firestore.collection('chats');
     const queryMessages = ref.where('aluno', '==', this.state.emailAluno).where('titulo', '==', this.props.title);
 
     queryMessages.get().then(

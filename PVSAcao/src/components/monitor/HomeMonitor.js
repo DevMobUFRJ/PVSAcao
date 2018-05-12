@@ -41,7 +41,9 @@ export default class HomeMonitor extends Component {
         }
 
         console.log('Entrou no metodo!');
-        const ref = firebase.firestore().collection('perguntas');
+        const firestore = firebase.firestore();
+        firestore.settings({ timestampsInSnapshots: true });
+        const ref = firestore.collection('perguntas');
         const queryUnanswered = ref.where('respondida', '==', false).where("materia", "==", this.state.materia);
         const queryAnswered = ref.where('monitor', '==', this.state.email).where('respondida', '==', true);
 
