@@ -13,6 +13,7 @@ import {
 import {Actions} from 'react-native-router-flux';
 import ScrollableTabView, {ScrollableTabBar,} from 'react-native-scrollable-tab-view';
 import Modal from 'react-native-modal';
+import keys from '../../config/keys';
 
 const firebase = require('firebase');
 require('firebase/firestore');
@@ -39,12 +40,12 @@ export default class HomeAluno extends Component {
     componentWillMount() {
         if (!firebase.apps.length) {
             firebase.initializeApp({
-                apiKey: process.env.PVS_FIREBASE_API_KEY || "***REMOVED***",
+                apiKey: keys.REACT_APP_PVS_FIREBASE_API_KEY,
                 authDomain: "pvs-acao.firebaseapp.com",
                 databaseURL: "https://pvs-acao.firebaseio.com",
                 projectId: "pvs-acao",
                 storageBucket: "pvs-acao.appspot.com",
-                messagingSenderId: process.env.PVS_SENDER_ID || ***REMOVED***
+                messagingSenderId: keys.REACT_APP_PVS_FIREBASE_SENDER_ID
             });
         }
         console.log('Entrou no metodo!');

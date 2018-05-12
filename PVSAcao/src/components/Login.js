@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
     StyleSheet,
     Text,
@@ -8,20 +8,20 @@ import {
     TouchableOpacity,
     ActivityIndicator
 } from 'react-native';
-import { Actions } from 'react-native-router-flux';
+import {Actions} from 'react-native-router-flux';
 import Modal from 'react-native-modal';
+import keys from '../config/keys';
 
 const firebase = require('firebase');
 require('firebase/firestore');
 const logo = require('../imgs/pvsacao-simple.png');
-
 
 export default class Login extends Component {
 
     constructor(props) {
         super(props);
 
-        this.state = { email: '', password: '', isVisible: false };
+        this.state = {email: '', password: '', isVisible: false};
 
         this.registerUser = this.registerUser.bind(this);
         this.loginUser = this.loginUser.bind(this);
@@ -30,12 +30,12 @@ export default class Login extends Component {
     componentWillMount() {
         if (!firebase.apps.length) {
             firebase.initializeApp({
-                apiKey: process.env.PVS_FIREBASE_API_KEY || "***REMOVED***",
+                apiKey: keys.REACT_APP_PVS_FIREBASE_API_KEY,
                 authDomain: "pvs-acao.firebaseapp.com",
                 databaseURL: "https://pvs-acao.firebaseio.com",
                 projectId: "pvs-acao",
                 storageBucket: "pvs-acao.appspot.com",
-                messagingSenderId: process.env.PVS_SENDER_ID || ***REMOVED***
+                messagingSenderId: keys.REACT_APP_PVS_FIREBASE_SENDER_ID
             });
         }
 
@@ -76,18 +76,18 @@ export default class Login extends Component {
                 this.loginFinalStep(email);
             }
         )
-        .catch(
-            (erro) => {
-                this.setState({isVisible: false});
-                msgErro = erro.message;
-                alert(msgErro);
-            }
-        );
+            .catch(
+                (erro) => {
+                    this.setState({isVisible: false});
+                    msgErro = erro.message;
+                    alert(msgErro);
+                }
+            );
     }
 
     loginFinalStep(email) {
         const firestore = firebase.firestore();
-        firestore.settings({ timestampsInSnapshots: true });
+        firestore.settings({timestampsInSnapshots: true});
         var db = firestore.collection('usuarios').doc(email);
         var msgErro = '';
 
@@ -96,17 +96,17 @@ export default class Login extends Component {
                 if (doc.exists) {
                     //console.log(doc.data().tipo);
                     const tipo = doc.data().tipo;
-                    this.setState({isVisible: false });
+                    this.setState({isVisible: false});
 
                     if (tipo == "aluno") {
                         console.log("Tipo de login é aluno!", email);
-                        Actions.homealuno({ email });
+                        Actions.homealuno({email});
                     } else if (tipo == 'monitor') {
                         console.log("Tipo de login é monitor!");
-                        Actions.homemonitor({ email, materia: doc.data().materia });
+                        Actions.homemonitor({email, materia: doc.data().materia});
                     }
                 } else {
-                    this.setState({ isVisible: false });
+                    this.setState({isVisible: false});
                     alert('Email não encontrado!');
                 }
             }
@@ -118,7 +118,7 @@ export default class Login extends Component {
     }
 
     render() {
-        const {container, img, texto, VLogo, Cdados, TxtInput, botao, Txtbotao } = styles;
+        const {container, img, texto, VLogo, Cdados, TxtInput, botao, Txtbotao} = styles;
         return (
             <View style={container}>
                 <Modal isVisible={this.state.isVisible} animationInTiming={1}>
@@ -132,15 +132,15 @@ export default class Login extends Component {
                 </View>
 
                 <View style={Cdados}>
-                    <TextInput style={TxtInput} placeholder="Email" keyboardType='email-address' 
-                        onChangeText={(e) => {
-                            this.setState({ email: e });
-                        }}
+                    <TextInput style={TxtInput} placeholder="Email" keyboardType='email-address'
+                               onChangeText={(e) => {
+                                   this.setState({email: e});
+                               }}
                     />
-                    <TextInput style={TxtInput} placeholder="Senha" secureTextEntry 
-                        onChangeText={(s) => {
-                            this.setState({ password: s });
-                        }}
+                    <TextInput style={TxtInput} placeholder="Senha" secureTextEntry
+                               onChangeText={(s) => {
+                                   this.setState({password: s});
+                               }}
                     />
                 </View>
 

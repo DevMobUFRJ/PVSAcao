@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
+import keys from '../config/keys';
 
 const firebase = require('firebase');
 require('firebase/firestore');
@@ -19,12 +20,12 @@ export default class Pergunta extends Component {
   componentWillMount() {
     if (!firebase.apps.length) {
       firebase.initializeApp({
-          apiKey: process.env.PVS_FIREBASE_API_KEY || "***REMOVED***",
+          apiKey: keys.REACT_APP_PVS_FIREBASE_API_KEY,
           authDomain: "pvs-acao.firebaseapp.com",
           databaseURL: "https://pvs-acao.firebaseio.com",
           projectId: "pvs-acao",
           storageBucket: "pvs-acao.appspot.com",
-          messagingSenderId: process.env.PVS_SENDER_ID || ***REMOVED***
+          messagingSenderId: keys.REACT_APP_PVS_FIREBASE_SENDER_ID
       });
     }
 

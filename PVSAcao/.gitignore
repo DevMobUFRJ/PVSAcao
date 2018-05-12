@@ -52,4 +52,4 @@ buck-out/
 */fastlane/Preview.html
 */fastlane/screenshots
 
-.env
+src/config/keys.js
