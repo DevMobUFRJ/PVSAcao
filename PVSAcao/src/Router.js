@@ -5,8 +5,8 @@ import Login from './components/Login';
 import HomeAdmin from './components/admin/HomeAdmin';
 import HomeAluno from './components/aluno/HomeAluno';
 import HomeMonitor from './components/monitor/HomeMonitor';
-import PerguntaCreate from './components/PerguntaCreate';
 import PerguntaShow from './components/PerguntaShow';
+import PerguntaDetails from './components/PerguntaDetails';
 
 const Rotas = () => (
     <Router>
@@ -16,7 +16,7 @@ const Rotas = () => (
             <Scene key="login" component={Login} initial hideNavBar />
             <Scene
                 sceneStyle={{ paddingTop: 50 }}
-                key="perguntashow" component={PerguntaShow} hideNavBar={false} title="Informações"
+                key="perguntadetails" component={PerguntaDetails} hideNavBar={false} title="Informações"
                 navigationBarStyle={{ backgroundColor: '#3A4A9F' }}
                 titleStyle={{ color: 'white' }}
                 leftButtonIconStyle={{ tintColor: 'white' }}
@@ -32,8 +32,8 @@ const Rotas = () => (
             />
             <Scene
                 sceneStyle={{ paddingTop: 50 }}
-                key="perguntacreate" component={PerguntaCreate} hideNavBar={false}
-                onRight={() => (Actions.perguntashow())}
+                key="perguntashow" component={PerguntaShow} hideNavBar={false}
+                onRight={() => (Actions.perguntadetails())}
                 rightButtonImage={require('./imgs/icons/ic_info_outline_white_24dp.png')}
                 rightButtonStyle={{ resizeMode: 'contain', }}
                 navigationBarStyle={{ backgroundColor: '#3A4A9F' }}

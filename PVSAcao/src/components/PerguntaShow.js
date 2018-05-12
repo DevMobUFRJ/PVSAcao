@@ -1,126 +1,74 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, } from 'react-native';
+import { GiftedChat } from 'react-native-gifted-chat';
+import keys from '../config/keys';
 
-const alunoI = require('../imgs/icons/ic_people_black_24dp.png');
-const turmaI = require('../imgs/icons/ic_school_black_24dp.png');
-const monitorI = require('../imgs/icons/ic_person_black_24dp.png');
+const firebase = require('firebase');
+require('firebase/firestore');
 
-export default class InfoPergunta extends Component {
-  render() {
-    const { container, aluno, nomeA, monitor, textos, botoes, botaoS, botaoN, textosB, icons, monitorA } = styles;
-    return (
-      <View style={container} >
-        <View style={aluno} >
-            <Text>Aluno</Text>
-            <View style={nomeA}>
-                <Image source={alunoI} style={icons} />
-                <Text style={textos} >Nome do Aluno</Text>
-            </View>
+export default class PerguntaShow extends Component {
+  constructor(props) {
+    super(props);
 
-            <View style={nomeA}>
-                <Image source={turmaI} style={icons} />
-                <Text style={textos} >Turma</Text>
-            </View>
-        </View>
+    this.state = {
+      emailAluno: this.props.emailAluno,
+      emailMonitor: '',
+      messages: [],
+    };
+  }
 
-        <View style={monitor}>
-            <Text>Monitor</Text>
-            <View style={monitorA}>            
-                <Image source={monitorI} style={icons} />
-                <Text style={textos} >Nome do Monitor</Text>
-            </View>
-        </View>  
+  componentWillMount() {
+    if (!firebase.apps.length) {
+      firebase.initializeApp({
+          apiKey: keys.REACT_APP_PVS_FIREBASE_API_KEY,
+          authDomain: "pvs-acao.firebaseapp.com",
+          databaseURL: "https://pvs-acao.firebaseio.com",
+          projectId: "pvs-acao",
+          storageBucket: "pvs-acao.appspot.com",
+          messagingSenderId: keys.REACT_APP_PVS_FIREBASE_SENDER_ID
+      });
+    }
 
-        <Text style={{ alignSelf: 'center', fontWeight: 'bold', color: 'black', marginBottom: 30, fontSize: 16 }} >Sua dúvida foi solucionada?</Text>
+    const firestore = firebase.firestore();
+    firestore.settings({ timestampsInSnapshots: true });
+    const ref = firestore.collection('chats');
+    const queryMessages = ref.where('aluno', '==', this.state.emailAluno).where('titulo', '==', this.props.title);
 
-        <View style={botoes}>
-            <TouchableOpacity activeOpacity={0.6} style={botaoS} ><Text style={textosB} >SIM</Text></TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.6} style={botaoN} ><Text style={textosB} >NÃO</Text></TouchableOpacity>
-        </View>
+    queryMessages.get().then(
+      (querySnap) => {
+        querySnap.forEach((doc) => {
+          console.log(doc.id, '=>', doc.data());
+        });
+      }      
+    );
 
-      </View>
-      
+    this.setState({
+      messages: [
+        {          
+          user: {
+            id: 2,
+            name: 'Jõaozinho',
+            avatar: require('../imgs/pvsacao-simple.png'),
+          },
+        },
+      ],
+    });
+  }
+
+  onSend(messages = []) {
+    this.setState(previousState => ({
+      messages: GiftedChat.append(previousState.messages, messages)
+    }));
+  }
+
+  render() {    
+    return (  
+        <GiftedChat placeholder='Escreva sua mensagem...' messages={this.state.messages} onSend={messages => this.onSend(messages)} user={{ id: 1 }} />
     );
   }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#FFF',
-        alignContent: 'center',
-        justifyContent: 'center',
-    },
-
-    aluno: {
-        flex: 2,
-        margin: 10,
-        lineHeight: 30,
-        borderBottomColor: '#9BAAAD',
-        borderBottomWidth: 1,
-    },
-
-    nomeA: {
-        marginTop: 10,
-        flexDirection: 'row',
-    },
-    
-    monitor: {
-        flex: 7,
-        margin: 10,
-    },
-
-    monitorA: {  
-        marginTop: 10,      
-        flexDirection: 'row',
-    },
-
-    textos: {
-        fontWeight: 'bold',
-        marginLeft: 25,
-    },
-
-    botoes: {
-        flex: 2,
-        justifyContent: 'center',
-        alignContent: 'center',
-        flexDirection: 'row',
-    },
-
-    botaoS: {   
-        borderRadius: 1, 
-        justifyContent: 'center',   
-        height: 30,
-        width: 100,
-        marginRight: 5,
-        backgroundColor: '#55C24A',
-    },
-
-    botaoN: {
-        borderRadius: 1,
-        justifyContent: 'center',
-        height: 30,
-        width: 100,
-        marginLeft: 5,
-        backgroundColor: '#FF4745',
-    },
-
-    textosB: {
-        color: '#FFF',
-        alignSelf: 'center',
-    },
-
-    icons: {
-        resizeMode: 'contain',
-        height: 20,
-        width: 20,
-    },
-    
+  
   
 });

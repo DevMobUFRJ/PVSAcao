@@ -96,7 +96,7 @@ export default class HomeMonitor extends Component {
                             renderItem={({item}) => (
                                 <View style={listRow}>
                                     <TouchableOpacity activeOpacity={0.9} onPress={() => {
-                                        Actions.perguntacreate({title: item});
+                                        Actions.perguntashow({title: item});
                                     }}>
                                         <View>
                                             <Text style={perguntasI}>{item}</Text>
@@ -117,7 +117,7 @@ export default class HomeMonitor extends Component {
                             renderItem={({item}) => (
                                 <View style={listRow}>
                                     <TouchableOpacity activeOpacity={0.9} onPress={() => {
-                                        Actions.perguntacreate({title: item});
+                                        Actions.perguntashow({title: item});
                                     }}>
                                         <View>
                                             <Text style={perguntasI}>{item}</Text>
