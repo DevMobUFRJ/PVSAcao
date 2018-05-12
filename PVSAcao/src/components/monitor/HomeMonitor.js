@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     StyleSheet,
     Text,
@@ -7,8 +7,8 @@ import {
     SectionList,
     ActivityIndicator
 } from 'react-native';
-import {Actions} from 'react-native-router-flux';
-import ScrollableTabView, {ScrollableTabBar,} from 'react-native-scrollable-tab-view';
+import { Actions } from 'react-native-router-flux';
+import ScrollableTabView, { ScrollableTabBar, } from 'react-native-scrollable-tab-view';
 import keys from '../../config/keys';
 
 const firebase = require('firebase');
@@ -33,19 +33,19 @@ export default class HomeMonitor extends Component {
         if (!firebase.apps.length) {
             firebase.initializeApp({
                 apiKey: keys.REACT_APP_PVS_FIREBASE_API_KEY,
-                authDomain: "pvs-acao.firebaseapp.com",
-                databaseURL: "https://pvs-acao.firebaseio.com",
-                projectId: "pvs-acao",
-                storageBucket: "pvs-acao.appspot.com",
+                authDomain: 'pvs-acao.firebaseapp.com',
+                databaseURL: 'https://pvs-acao.firebaseio.com',
+                projectId: 'pvs-acao',
+                storageBucket: 'pvs-acao.appspot.com',
                 messagingSenderId: keys.REACT_APP_PVS_FIREBASE_SENDER_ID
             });
         }
 
         console.log('Entrou no metodo!');
         const firestore = firebase.firestore();
-        firestore.settings({timestampsInSnapshots: true});
+        firestore.settings({ timestampsInSnapshots: true });
         const ref = firestore.collection('perguntas');
-        const queryUnanswered = ref.where('respondida', '==', false).where("materia", "==", this.state.materia);
+        const queryUnanswered = ref.where('respondida', '==', false).where('materia', '==', this.state.materia);
         const queryAnswered = ref.where('monitor', '==', this.state.email).where('respondida', '==', true);
 
         queryUnanswered.get().then(
@@ -53,10 +53,10 @@ export default class HomeMonitor extends Component {
                 querySnap.forEach((doc) => {
                     console.log(doc.id, '=>', doc.data());
                     const perguntaR = this.state.unansweredQuestions.concat(doc.data().titulo);
-                    this.setState({unansweredQuestions: perguntaR});
+                    this.setState({ unansweredQuestions: perguntaR });
                 });
                 console.log(this.state.unansweredQuestions);
-                this.setState({fetch: true});
+                this.setState({ fetch: true });
                 console.log(this.state.fetch);
             }
         );
@@ -66,10 +66,10 @@ export default class HomeMonitor extends Component {
                 querySnap.forEach((doc) => {
                     console.log(doc.id, '=>', doc.data());
                     const perguntaE = this.state.answeredQuestions.concat(doc.data().titulo);
-                    this.setState({answeredQuestions: perguntaE});
+                    this.setState({ answeredQuestions: perguntaE });
                 });
                 console.log(this.state.answeredQuestions);
-                this.setState({fetch: true});
+                this.setState({ fetch: true });
                 console.log(this.state.fetch);
             }
         );
@@ -78,26 +78,28 @@ export default class HomeMonitor extends Component {
     render() {
         if (!this.state.fetch) {
             return (
-                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                    <ActivityIndicator size='large' color="#616EB2"/>
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <ActivityIndicator size='large' color="#616EB2" />
                 </View>
             );
         }
-        const {principal, perguntas, perguntasI, listRow, materiasI} = styles;
+        const { principal, perguntas, perguntasI, listRow, materiasI } = styles;
         return (
             <View style={principal}>
-                <ScrollableTabView renderTabBar={() => <ScrollableTabBar/>}>
+                <ScrollableTabView renderTabBar={() => <ScrollableTabBar />}>
 
                     <View style={perguntas} tabLabel='AGUARDANDO RESPOSTA'>
                         <SectionList
                             sections={[
-                                {data: this.state.unansweredQuestions},
+                                { data: this.state.unansweredQuestions },
                             ]}
-                            renderItem={({item}) => (
+                            renderItem={({ item }) => (
                                 <View style={listRow}>
-                                    <TouchableOpacity activeOpacity={0.9} onPress={() => {
-                                        Actions.perguntashow({title: item});
-                                    }}>
+                                    <TouchableOpacity
+                                    activeOpacity={0.9} onPress={() => {
+                                        Actions.perguntashow({ title: item, emailMonitor: this.state.email });
+                                    }}
+                                    >
                                         <View>
                                             <Text style={perguntasI}>{item}</Text>
                                             <Text style={materiasI}>Matéria</Text>
@@ -112,13 +114,15 @@ export default class HomeMonitor extends Component {
                     <View style={perguntas} tabLabel='RESPONDIDAS'>
                         <SectionList
                             sections={[
-                                {data: this.state.answeredQuestions},
+                                { data: this.state.answeredQuestions },
                             ]}
-                            renderItem={({item}) => (
+                            renderItem={({ item }) => (
                                 <View style={listRow}>
-                                    <TouchableOpacity activeOpacity={0.9} onPress={() => {
-                                        Actions.perguntashow({title: item});
-                                    }}>
+                                    <TouchableOpacity
+                                    activeOpacity={0.9} onPress={() => {
+                                        Actions.perguntashow({ title: item, emailMonitor: this.state.email });
+                                    }}
+                                    >
                                         <View>
                                             <Text style={perguntasI}>{item}</Text>
                                             <Text style={materiasI}>Matéria</Text>
