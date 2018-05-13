@@ -64,9 +64,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     row: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
         flex: 1
     },
     bg1: {
@@ -79,10 +76,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#719Ed2'
     },
     button: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     buttonTxt: {
         fontWeight: 'bold',
         fontSize: 16,
-        color: 'white',
+        color: 'white'
     }
 });
