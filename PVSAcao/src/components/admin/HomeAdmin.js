@@ -1,13 +1,13 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     StyleSheet,
     Text,
     View,
     TouchableOpacity
 } from 'react-native';
+import { Actions } from 'react-native-router-flux/index';
 
 export default class HomeAdmin extends Component {
-
     constructor(props) {
         super(props);
 
@@ -23,20 +23,33 @@ export default class HomeAdmin extends Component {
         return (
             <View style={styles.main}>
                 <View style={[styles.row, styles.bg1]}>
-                    <TouchableOpacity activeOpacity={0.9} style={styles.button}
-                                      onPress={() => (this.setState({isVisible: true}))}>
+                    <TouchableOpacity
+                        activeOpacity={0.9}
+                        style={styles.button}
+                        onPress={() => {
+                            Actions.manageusuarios({ userType: 'aluno' });
+                        }}
+                    >
                         <Text style={styles.buttonTxt}>Gerenciar Alunos</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={[styles.row, styles.bg2]}>
-                    <TouchableOpacity activeOpacity={0.9} style={styles.button}
-                                      onPress={() => (this.setState({isVisible: true}))}>
+                    <TouchableOpacity
+                        activeOpacity={0.9}
+                        style={styles.button}
+                        onPress={() => {
+                            Actions.manageusuarios({ userType: 'monitor' });
+                        }}
+                    >
                         <Text style={styles.buttonTxt}>Gerenciar Monitores</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={[styles.row, styles.bg3]}>
-                    <TouchableOpacity activeOpacity={0.9} style={styles.button}
-                                      onPress={() => (this.setState({isVisible: true}))}>
+                    <TouchableOpacity
+                        activeOpacity={0.9}
+                        style={styles.button}
+                        onPress={() => (this.setState({isVisible: true}))}
+                    >
                         <Text style={styles.buttonTxt}>Gerenciar Perguntas</Text>
                     </TouchableOpacity>
                 </View>
