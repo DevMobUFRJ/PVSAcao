@@ -137,6 +137,12 @@ export default class PerguntaShow extends Component {
   }
 
   onReceive(text) {
+    var user2 = 0;
+    if (this.state.userId === 1) {
+      user2 = 0;
+    } else {
+      user2 = 1;
+    }
     this.setState(previousState => {
       return {
         messages: GiftedChat.append(previousState.messages, {
@@ -144,7 +150,7 @@ export default class PerguntaShow extends Component {
           text: text,
           createdAt: new Date(),
           user: {
-            _id: 1,
+            _id: user2,
           },
         }),
       };
