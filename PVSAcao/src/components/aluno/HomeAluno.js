@@ -33,9 +33,11 @@ export default class HomeAluno extends Component {
             questionTitle: '',
             questionClass: 'biologia',
             tabPage: 0,
+            emailMontitor: '',
         };
         this.newQuestion = this.newQuestion.bind(this);
         this.attQuestions = this.attQuestions.bind(this);
+        this.getMonitorEmail = this.getMonitorEmail.bind(this);
     }
 
     componentWillMount() {
@@ -114,6 +116,19 @@ export default class HomeAluno extends Component {
         this.attQuestions();
     }
 
+    getMonitorEmail(titulo) {
+        const firestore = firebase.firestore();
+        firestore.settings({ timestampsInSnapshots: true });
+        const ref = firestore.collection('perguntas');
+        const queryA = ref.where('aluno', '==', this.state.email).where('titulo', '==', titulo);
+        queryA.get().then((querySnap) => {
+            querySnap.forEach((doc) => {
+                this.setState({ emailMontitor: doc.data().monitor });
+            });
+        });
+        Actions.perguntashow({ title: titulo, emailAluno: this.state.email, emailMonitor: this.state.emailMontitor, userId: 0 });
+    }
+
     render() {
         console.log('render chamado');
         if (!this.state.fetch) {
@@ -182,7 +197,7 @@ export default class HomeAluno extends Component {
                                     <TouchableOpacity
                                     style={{ flex: 1 }} activeOpacity={0.5} 
                                     onPress={() => {
-                                        Actions.perguntashow({ title: item, emailAluno: this.state.email });
+                                        this.getMonitorEmail(item);
                                     }}
                                     >
                                         <View>
@@ -205,7 +220,7 @@ export default class HomeAluno extends Component {
                                 <View style={listRow}>
                                     <TouchableOpacity
                                     style={{ flex: 1 }} activeOpacity={0.5} onPress={() => {
-                                        Actions.perguntashow({ title: item, emailAluno: this.state.email });
+                                        this.getMonitorEmail(item);
                                     }}
                                     >
                                         <View>

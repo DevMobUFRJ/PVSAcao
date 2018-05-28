@@ -25,7 +25,8 @@ export default class HomeMonitor extends Component {
             materia: this.props.materia,
             unansweredQuestions: [],
             answeredQuestions: [],
-            materiasA: []
+            materiasA: [],
+            perguntaAluno: ''
         };
     }
 
@@ -75,6 +76,27 @@ export default class HomeMonitor extends Component {
         );
     }
 
+    acharAluno(titulo) {
+        const firestore = firebase.firestore();
+        firestore.settings({ timestampsInSnapshots: true });
+        const ref = firestore.collection('perguntas');
+        const queryA = ref.where('titulo', '==', titulo);
+        if (this.state.perguntaAluno === '') {
+            queryA.get().then(
+                (querySnap) => {
+                    querySnap.forEach((doc) => {
+                        this.setState({ perguntaAluno: doc.data().aluno });
+                        console.log('emailAluno:', this.state.perguntaAluno, 'titulo:', titulo);
+                        Actions.perguntashow({ title: titulo, emailMonitor: this.state.email, emailAluno: this.state.perguntaAluno, userId: 1 });
+                    });
+                }
+            );            
+        } else {
+            console.log('emailAluno:', this.state.perguntaAluno, 'titulo:', titulo);
+            Actions.perguntashow({ title: titulo, emailMonitor: this.state.email, emailAluno: this.state.perguntaAluno, userId: 1 });
+        }      
+    }
+
     render() {
         if (!this.state.fetch) {
             return (
@@ -97,7 +119,7 @@ export default class HomeMonitor extends Component {
                                 <View style={listRow}>
                                     <TouchableOpacity
                                     activeOpacity={0.9} onPress={() => {
-                                        Actions.perguntashow({ title: item, emailMonitor: this.state.email });
+                                        this.acharAluno(item);                                        
                                     }}
                                     >
                                         <View>
@@ -120,7 +142,7 @@ export default class HomeMonitor extends Component {
                                 <View style={listRow}>
                                     <TouchableOpacity
                                     activeOpacity={0.9} onPress={() => {
-                                        Actions.perguntashow({ title: item, emailMonitor: this.state.email });
+                                        this.acharAluno(item);
                                     }}
                                     >
                                         <View>
@@ -139,7 +161,6 @@ export default class HomeMonitor extends Component {
         );
     }
 }
-
 const styles = StyleSheet.create({
     principal: {
         flex: 1,
