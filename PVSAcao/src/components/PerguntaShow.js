@@ -21,6 +21,8 @@ export default class PerguntaShow extends Component {
     };
 
     this.attMsgs = this.attMsgs.bind(this);
+    this.onReceive = this.onReceive.bind(this);
+    this.onSend = this.onSend.bind(this);
   }
 
   componentWillMount() {
@@ -35,6 +37,7 @@ export default class PerguntaShow extends Component {
       });
     }
 
+    console.log('id usuario é:', this.state.userId);
     this.setState({
       messages: [        
       ],
@@ -46,14 +49,14 @@ export default class PerguntaShow extends Component {
     t.get().then(
       (querySnap) => {
         if (querySnap.docs.length === 0) {
-          console.log('vazio');
+          //console.log('vazio');
           firebase.firestore().collection('chats').add({
             aluno: this.state.emailAluno,
             materia: '', //add depois
             monitor: this.state.emailMonitor,
             titulo: this.state.titulo,
           }).then((doc) => {
-              console.log('adicionado no vazio:', doc.id);
+              //console.log('adicionado no vazio:', doc.id);
               firestore.collection('chats').doc(doc.id).collection('messages').add({
                 _id: 1,
                 createdAt: new Date(),
@@ -68,24 +71,41 @@ export default class PerguntaShow extends Component {
           querySnap.forEach((doc) => {
             console.log(doc.id, '->', doc.data());
             this.setState({ messageId: doc.id });
-            firestore.collection('chats').doc(doc.id).collection('messages').orderBy('createdAt', 'desc').get()
+            var db = firestore.collection('chats').doc(doc.id).collection('messages');             
+              db.onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach((change) => {                
+                  if (change.type === 'added' && this.state.fetch === true) {
+                    console.log('Adicionado:', change.doc.data());
+                    if (change.doc.data().user_id !== this.state.userId) {
+                      this.onReceive(change.doc.data().text);
+                    }
+                  }
+                  if (change.type === 'modified') {
+                    console.log('Modificado:', change.doc.data());
+                  }
+                  if (change.type === 'removed') {
+                    console.log('Removido:', change.doc.data());
+                  }
+                });
+              });                      
+            db.orderBy('createdAt', 'desc').get()
             .then(
               (snap) => {
                 snap.forEach((vai) => {
-                  console.log(vai.id, '->', vai.data());
+                  //console.log(vai.id, '->', vai.data());
                   var timestamp = vai.data().createdAt;    
                   var date = new Date(timestamp.toDate());
-                  console.log('data?', date);
+                  //console.log('data?', date);
                   const message = this.state.messages.concat({
                     _id: vai.id,
                     text: vai.data().text,
                     createdAt: date,
                     user: vai.data().user,
                   });
-                  this.setState({ messages: message });
-                  console.log('aqui as msgs:', this.state.messages);                  
+                  this.setState({ messages: message });                
                 });
                 this.setState({ fetch: true });
+                console.log('Fetch ficou true');
               } 
             );
           }); 
@@ -98,11 +118,11 @@ export default class PerguntaShow extends Component {
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages)
     }));
-    console.log(this.state.messages);
-    const ref = firebase.firestore().collection('chats').doc(this.state.messageId).collection('messages');
+    //console.log(this.state.messages);
 
+    const ref = firebase.firestore().collection('chats').doc(this.state.messageId).collection('messages');
     messages.forEach(element => {
-      console.log(element.user._id);
+      //console.log(element.user._id);
       ref.add({
         text: element.text,
         user: element.user,
@@ -116,9 +136,25 @@ export default class PerguntaShow extends Component {
     });    
   }
 
-  attMsgs() {        
+  onReceive(text) {
+    this.setState(previousState => {
+      return {
+        messages: GiftedChat.append(previousState.messages, {
+          _id: Math.round(Math.random() * 100000),
+          text: text,
+          createdAt: new Date(),
+          user: {
+            _id: 1,
+          },
+        }),
+      };
+    });
+    console.log('Recebida mensagem:', text);
+  }
+
+  attMsgs() {    
+    this.setState({ messages: [] });    
     const firestore = firebase.firestore();
-    firestore.settings({ timestampsInSnapshots: true });
     const t = firestore.collection('chats').where('aluno', '==', this.state.emailAluno).where('titulo', '==', this.state.titulo);
     t.get().then(
       (querySnap) => {
@@ -129,7 +165,7 @@ export default class PerguntaShow extends Component {
           .then(
             (snap) => {
               snap.forEach((vai) => {
-                console.log(vai.id, '->', vai.data());
+                //console.log(vai.id, '->', vai.data());
                 var timestamp = vai.data().createdAt;    
                 var date = new Date(timestamp.toDate());
                 if (vai.data().user_id == 0 || vai.data().user_id == 1) {
@@ -165,7 +201,8 @@ export default class PerguntaShow extends Component {
               <ActivityIndicator size='large' color="#616EB2" />
           </View>
       );
-  }  
+  }
+    //alert('oi');
     return (  
         <GiftedChat placeholder='Escreva sua mensagem...' messages={this.state.messages} 
         onSend={messages => this.onSend(messages)} user={{ _id: this.state.userId }} 
