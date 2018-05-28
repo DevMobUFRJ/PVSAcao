@@ -14,6 +14,7 @@ import { Actions } from 'react-native-router-flux';
 import ScrollableTabView, { ScrollableTabBar,  } from 'react-native-scrollable-tab-view';
 import Modal from 'react-native-modal';
 import keys from '../../config/keys';
+import constantes from '../../config/constants';
 
 const firebase = require('firebase');
 require('firebase/firestore');
@@ -143,30 +144,34 @@ export default class HomeAluno extends Component {
             <View style={principal}>
                 <Modal isVisible={this.state.isVisible} animationInTiming={300}>
                     <View
-                    style={{
-                        justifyContent: 'center',
-                        alignContent: 'center',
-                        backgroundColor: 'white',
-                        height: 250
-                    }}
+                        style={{
+                            justifyContent: 'center',
+                            alignContent: 'center',
+                            backgroundColor: 'white',
+                            height: 250
+                        }}
                     >
                         <View style={modalTexts}>
                             <TextInput
-                            style={modalInput} placeholder='Titulo da pergunta' 
-                            onChangeText={(t) => {
-                                this.setState({ questionTitle: t });
-                            }} 
+                                style={modalInput}
+                                placeholder='Titulo da pergunta'
+                                onChangeText={(t) => {
+                                    this.setState({ questionTitle: t });
+                                }}
                             />
                             <Picker
-                            style={modalInput}
+                                style={modalInput}
                                 mode='dropdown'
                                 selectedValue={this.state.questionClass}
                                 onValueChange={(itemValue, itemIndex) => {
                                     this.setState({ questionClass: itemValue });
                                 }}
                             >
-                                <Picker.Item label='Biologia' value='biologia' />
-                                <Picker.Item label='Matematica' value='matematica' />
+                                {
+                                    constantes.materias.map((materia) =>
+                                        <Picker.Item label={materia.nome} value={materia.value} />
+                                    )
+                                }
                             </Picker>
                         </View>
                         <View style={containerButtons}>
@@ -185,8 +190,10 @@ export default class HomeAluno extends Component {
                         </View>
                     </View>
                 </Modal>
-                <ScrollableTabView page={this.state.tabPage} renderTabBar={() => <ScrollableTabBar />}>
-
+                <ScrollableTabView
+                    page={this.state.tabPage}
+                    renderTabBar={() => <ScrollableTabBar />}
+                >
                     <View style={perguntas} tabLabel='RESPONDIDAS'>
                         <SectionList
                             sections={[

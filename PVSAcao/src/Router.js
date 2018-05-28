@@ -7,6 +7,7 @@ import HomeAluno from './components/aluno/HomeAluno';
 import HomeMonitor from './components/monitor/HomeMonitor';
 import PerguntaShow from './components/PerguntaShow';
 import PerguntaDetails from './components/PerguntaDetails';
+import ManageUsuarios from './components/admin/ManageUsuarios';
 
 const Rotas = () => (
     <Router>
@@ -54,6 +55,13 @@ const Rotas = () => (
             <Scene
                 sceneStyle={{ paddingTop: 50 }}
                 key="homeadmin" component={HomeAdmin} title="Administração" hideNavBar={false}
+                navigationBarStyle={{ backgroundColor: '#3A4A9F' }}
+                titleStyle={{ color: 'white' }}
+                leftButtonIconStyle={{ tintColor: 'white' }}
+            />
+            <Scene
+                sceneStyle={{ paddingTop: 50 }}
+                key="manageusuarios" component={ManageUsuarios} title="Gerenciar Usuarios" hideNavBar={false}
                 navigationBarStyle={{ backgroundColor: '#3A4A9F' }}
                 titleStyle={{ color: 'white' }}
                 leftButtonIconStyle={{ tintColor: 'white' }}
