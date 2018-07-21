@@ -23,7 +23,6 @@ export default class Login extends Component {
 
         this.state = {email: '', password: '', isVisible: false};
 
-        this.registerUser = this.registerUser.bind(this);
         this.loginUser = this.loginUser.bind(this);
     }
 
@@ -51,19 +50,6 @@ export default class Login extends Component {
         });
     }
 
-    registerUser() {
-        //ainda não implementado
-        var email = this.state.email;
-        var password = this.state.password;
-
-        const user = firebase.auth();
-
-        user.createUserWithEmailAndPassword(email, password).catch(
-            (erro) => {
-                alert(erro.message);
-            }
-        );
-    }
 
     loginUser() {
         this.setState({isVisible: true});

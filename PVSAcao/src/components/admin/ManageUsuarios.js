@@ -5,7 +5,6 @@ import {
     View,
     TouchableOpacity,
     SectionList,
-    Alert,
     ActivityIndicator
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
@@ -82,7 +81,8 @@ export default class ManageUsuarios extends Component {
                     >
                         <View style={styles.modalTexts}>
                             <Text>
-                                Tem certeza que deseja remover TODOS os usuários do tipo {this.state.userType}
+                                Tem certeza que deseja remover TODOS
+                                os usuários do tipo {this.state.userType}?
                             </Text>
                         </View>
                         <View style={styles.containerButtons}>
@@ -125,10 +125,20 @@ export default class ManageUsuarios extends Component {
 
                 <View style={styles.novaPergunta}>
                     <TouchableOpacity
-                        activeOpacity={0.9} style={styles.botao}
+                        activeOpacity={0.9} style={[styles.botao, styles.botaoBg1]}
+                        onPress={() => {
+                            Actions.criarusuario({ userType: this.state.userType });
+                        }}
+                    >
+                        <Text style={styles.txtBotao}>
+                            NOVO { this.state.userType.toUpperCase() }
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        activeOpacity={0.9} style={[styles.botao, styles.botaoBg2]}
                         onPress={() => (this.setState({ isModalVisible: true }))}
                     >
-                        <Text style={styles.txtBotao}>NOVA PERGUNTA</Text>
+                        <Text style={styles.txtBotao}>APAGAR TODOS</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -171,14 +181,24 @@ const styles = StyleSheet.create({
     },
 
     novaPergunta: {
-        flex: 0.1,
+        flex: 1,
+        flexDirection: 'row'
     },
 
     botao: {
         height: 52,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#616EB2',
+        flex: 1,
+        flexDirection: 'row'
+    },
+
+    botaoBg1: {
+        backgroundColor: '#616EB2'
+    },
+
+    botaoBg2: {
+        backgroundColor: '#c33d26'
     },
 
     txtBotao: {

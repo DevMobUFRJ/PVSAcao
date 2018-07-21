@@ -8,16 +8,20 @@ import HomeMonitor from './components/monitor/HomeMonitor';
 import PerguntaShow from './components/PerguntaShow';
 import PerguntaDetails from './components/PerguntaDetails';
 import ManageUsuarios from './components/admin/ManageUsuarios';
+import CriarUsuario from './components/admin/CriarUsuario';
 
 const Rotas = () => (
     <Router>
         <Stack key="root" >
 
             {/* COMMON */}
-            <Scene key="login" component={Login} initial hideNavBar />
+            <Scene
+                key="login" component={Login} initial hideNavBar
+            />
             <Scene
                 sceneStyle={{ paddingTop: 50 }}
-                key="perguntadetails" component={PerguntaDetails} hideNavBar={false} title="Informações"
+                title="Informações"
+                key="perguntadetails" component={PerguntaDetails} hideNavBar={false}
                 navigationBarStyle={{ backgroundColor: '#3A4A9F' }}
                 titleStyle={{ color: 'white' }}
                 leftButtonIconStyle={{ tintColor: 'white' }}
@@ -25,11 +29,12 @@ const Rotas = () => (
 
             {/* ALUNO */}
             <Scene 
-            sceneStyle={{ paddingTop: 50 }}
-            key="homealuno" component={HomeAluno} title="Minhas Perguntas" hideNavBar={false} 
-            navigationBarStyle={{ backgroundColor: '#3A4A9F' }}
-            titleStyle={{ color: 'white' }}
-            leftButtonIconStyle={{ tintColor: 'white' }}
+                sceneStyle={{ paddingTop: 50 }}
+                title="Minhas Perguntas"
+                key="homealuno" component={HomeAluno} hideNavBar={false}
+                navigationBarStyle={{ backgroundColor: '#3A4A9F' }}
+                titleStyle={{ color: 'white' }}
+                leftButtonIconStyle={{ tintColor: 'white' }}
             />
             <Scene
                 sceneStyle={{ paddingTop: 50 }}
@@ -44,11 +49,11 @@ const Rotas = () => (
 
             {/* MONITOR */}
             <Scene 
-            sceneStyle={{ paddingTop: 50 }}
-            key="homemonitor" component={HomeMonitor} title="Perguntas" hideNavBar={false}
-            navigationBarStyle={{ backgroundColor: '#3A4A9F' }}
-            titleStyle={{ color: 'white' }}
-            leftButtonIconStyle={{ tintColor: 'white' }}
+                sceneStyle={{ paddingTop: 50 }}
+                key="homemonitor" component={HomeMonitor} title="Perguntas" hideNavBar={false}
+                navigationBarStyle={{ backgroundColor: '#3A4A9F' }}
+                titleStyle={{ color: 'white' }}
+                leftButtonIconStyle={{ tintColor: 'white' }}
             />
 
             {/* ADMIN */}
@@ -62,6 +67,13 @@ const Rotas = () => (
             <Scene
                 sceneStyle={{ paddingTop: 50 }}
                 key="manageusuarios" component={ManageUsuarios} title="Gerenciar Usuarios" hideNavBar={false}
+                navigationBarStyle={{ backgroundColor: '#3A4A9F' }}
+                titleStyle={{ color: 'white' }}
+                leftButtonIconStyle={{ tintColor: 'white' }}
+            />
+            <Scene
+                sceneStyle={{ paddingTop: 50 }}
+                key="criarusuario" component={CriarUsuario} title="Criar Usuario" hideNavBar={false}
                 navigationBarStyle={{ backgroundColor: '#3A4A9F' }}
                 titleStyle={{ color: 'white' }}
                 leftButtonIconStyle={{ tintColor: 'white' }}
