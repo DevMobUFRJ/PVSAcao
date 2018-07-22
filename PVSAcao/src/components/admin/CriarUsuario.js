@@ -113,25 +113,28 @@ export default class CriarUsuario extends Component {
             <View style={styles.principal}>
                 <Modal isVisible={this.state.ocupado} animationInTiming={1}>
                     <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }}>
-                        <ActivityIndicator size='large' color='white'/>
+                        <ActivityIndicator size='large' color='white' />
                     </View>
                 </Modal>
                 <View>
-                    <Text>Nome:</Text>
+                    <Text style={styles.tituloCampo}>Nome:</Text>
                     <TextInput
+                        style={styles.entradaTexto}
                         onChangeText={(novoNome) => this.setState({ nome: novoNome })}
                         value={this.state.nome}
                     />
-                    <Text>Email:</Text>
+                    <Text style={styles.tituloCampo}>Email:</Text>
                     <TextInput
+                        style={styles.entradaTexto}
                         onChangeText={(novoEmail) => this.setState({ email: novoEmail })}
                         keyboardType='email-address'
                         value={this.state.email}
                     />
                     {this.state.userType.toLowerCase() === 'aluno' &&
                         <View>
-                            <Text>Turma:</Text>
+                            <Text style={styles.tituloCampo}>Turma:</Text>
                             <TextInput
+                                style={styles.entradaTexto}
                                 onChangeText={(novaTurma) => this.setState({ turma: novaTurma })}
                                 value={this.state.turma}
                             />
@@ -139,8 +142,9 @@ export default class CriarUsuario extends Component {
                     }
                     {this.state.userType.toLowerCase() === 'monitor' &&
                         <View>
-                            <Text>Materia:</Text>
+                            <Text style={styles.tituloCampo}>Materia:</Text>
                             <Picker
+                                style={styles.entradaTexto}
                                 mode='dropdown'
                                 selectedValue={this.state.materia}
                                 onValueChange={(itemValue, itemIndex) => {
@@ -158,6 +162,7 @@ export default class CriarUsuario extends Component {
                     }
                     { !this.state.ocupado &&
                         <TouchableOpacity
+                            style={styles.botao}
                             activeOpacity={0.9}
                             onPress={
                                 () => {
@@ -165,7 +170,7 @@ export default class CriarUsuario extends Component {
                                 }
                             }
                         >
-                            <Text>Registrar</Text>
+                            <Text style={styles.txtBotao}>REGISTRAR</Text>
                         </TouchableOpacity>
                     }
                 </View>
@@ -179,4 +184,30 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
     },
+
+    tituloCampo: {
+        marginTop: 10,
+        marginLeft: 10,
+        marginRight: 10
+    },
+
+    entradaTexto: {
+        marginLeft: 10,
+        marginRight: 10
+    },
+
+    botao: {
+        margin: 10,
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#616EB2',
+    },
+
+    txtBotao: {
+        fontWeight: 'bold',
+        fontSize: 14,
+        color: 'white',
+    },
+
 });
