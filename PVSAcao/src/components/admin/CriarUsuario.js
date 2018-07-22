@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+    ActivityIndicator,
     StyleSheet,
     Text,
     TextInput,
@@ -9,6 +10,8 @@ import {
     Alert
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import Modal from 'react-native-modal';
+
 import keys from '../../config/keys';
 import constantes from '../../config/constants';
 
@@ -25,25 +28,31 @@ export default class CriarUsuario extends Component {
             email: '',
             materia: '',
             turma: '',
-            conexao: ''
+            conexao: '',
+            ocupado: false
         };
     }
 
     componentWillMount() {
-        this.setState({ conexao: firebase.initializeApp({
-                apiKey: keys.REACT_APP_PVS_FIREBASE_API_KEY,
-                authDomain: 'pvs-acao.firebaseapp.com',
-                databaseURL: 'https://pvs-acao.firebaseio.com',
-                projectId: 'pvs-acao',
-                storageBucket: 'pvs-acao.appspot.com',
-                messagingSenderId: keys.REACT_APP_PVS_FIREBASE_SENDER_ID
-            },'segundaconexao') });
+        try {
+            this.setState({
+                conexao: firebase.initializeApp({
+                    apiKey: keys.REACT_APP_PVS_FIREBASE_API_KEY,
+                    authDomain: 'pvs-acao.firebaseapp.com',
+                    databaseURL: 'https://pvs-acao.firebaseio.com',
+                    projectId: 'pvs-acao',
+                    storageBucket: 'pvs-acao.appspot.com',
+                    messagingSenderId: keys.REACT_APP_PVS_FIREBASE_SENDER_ID
+                }, 'segundaconexao')
+            });
+        } catch (err) {
+            this.setState({ conexao: firebase.app('segundaconexao') });
+        }
     }
 
 
-    salvarUsuario(){
-        console.log("Salvar usuario metodo");
-        console.log(this.state);
+    salvarUsuario() {
+        this.setState({ ocupado: true });
         this.registrarUsuarioParaAutenticacao();
     }
 
@@ -56,12 +65,13 @@ export default class CriarUsuario extends Component {
         user.createUserWithEmailAndPassword(email, password)
             .then(
                 () => {
-                    console.log('Sucesso no registro de autenticação.');
+                    //Sucesso no registro de autenticação
                     this.registrarDadosDoUsuario();
                 }
             )
             .catch(
             (erro) => {
+                this.setState({ ocupado: false });
                 alert('Erro durante o cadastro do usuário: ' + erro.message);
             }
         );
@@ -75,24 +85,24 @@ export default class CriarUsuario extends Component {
             tipo: this.state.userType.toLowerCase()
         };
 
-        if(this.state.userType.toLowerCase() === 'aluno'){
+        if (this.state.userType.toLowerCase() === 'aluno') {
             novoUsuario.turma = this.state.turma;
-        } else if (this.state.userType.toLowerCase() === 'monitor'){
+        } else if (this.state.userType.toLowerCase() === 'monitor') {
             novoUsuario.materia = this.state.materia;
         }
 
         usuarios.doc(this.state.email).set(novoUsuario)
             .then(
                 () => {
-                    console.log('Registro completo');
                     alert('Usuario criado com sucesso! Email registrado: ' + this.state.email);
+                    this.setState({ ocupado: false });
                     Actions.pop();
                 }
             )
             .catch(
                 (erro) => {
-                    console.log('Erro nos dados do usuario');
                     alert('Erro na segunda etapa de cadastro: ' + erro.message);
+                    this.setState({ ocupado: false });
                 }
             );
     }
@@ -101,6 +111,11 @@ export default class CriarUsuario extends Component {
     render() {
         return (
             <View style={styles.principal}>
+                <Modal isVisible={this.state.ocupado} animationInTiming={1}>
+                    <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }}>
+                        <ActivityIndicator size='large' color='white'/>
+                    </View>
+                </Modal>
                 <View>
                     <Text>Nome:</Text>
                     <TextInput
@@ -141,17 +156,18 @@ export default class CriarUsuario extends Component {
                             </Picker>
                         </View>
                     }
-
-                    <TouchableOpacity
-                        activeOpacity={0.9}
-                        onPress={
-                            () => {
-                                this.salvarUsuario();
+                    { !this.state.ocupado &&
+                        <TouchableOpacity
+                            activeOpacity={0.9}
+                            onPress={
+                                () => {
+                                    this.salvarUsuario();
+                                }
                             }
-                        }
-                    >
-                        <Text>ENTRAR</Text>
-                    </TouchableOpacity>
+                        >
+                            <Text>Registrar</Text>
+                        </TouchableOpacity>
+                    }
                 </View>
             </View>
         );
