@@ -78,7 +78,7 @@ export default class CriarUsuario extends Component {
     }
 
 
-    registrarDadosDoUsuario(){
+    registrarDadosDoUsuario() {
         const usuarios = firebase.firestore().collection('usuarios');
         let novoUsuario = {
             nome: this.state.nome,

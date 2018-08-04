@@ -15,17 +15,17 @@ import keys from '../../config/keys';
 const firebase = require('firebase');
 require('firebase/firestore');
 
-export default class ManageUsuarios extends Component {
+export default class ManagePerguntas extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             fetch: false,
             userType: this.props.userType,
-            users: [],
+            perguntas: [],
             isModalVisible: false
         };
-        this.getUsers = this.getUsers.bind(this);
+        this.getPerguntas = this.getPerguntas.bind(this);
     }
 
     componentWillMount() {
@@ -39,21 +39,21 @@ export default class ManageUsuarios extends Component {
                 messagingSenderId: keys.REACT_APP_PVS_FIREBASE_SENDER_ID
             });
         }
-        this.getUsers();
+        this.getPerguntas();
     }
 
-    getUsers() {
+    getPerguntas() {
         this.setState({ users: [] });
-        console.log('Pegando usuarios');
+        console.log('Pegando perguntas');
         const firestore = firebase.firestore();
         firestore.settings({ timestampsInSnapshots: true });
-        const ref = firestore.collection('usuarios');
-        const queryUsers = ref.where('tipo', '==', this.state.userType);
+        const ref = firestore.collection('perguntas');
 
-        queryUsers.get().then(
+        ref.get().then(
             (querySnap) => {
                 querySnap.forEach((doc) => {
-                    this.setState({ users: this.state.users.concat(Object.assign({ email: doc.id }, doc.data())) });
+                    this.setState({ perguntas: this.state.perguntas.concat(Object.assign({ email: doc.aluno }, doc.data())) });
+                    console.log(doc.data());
                 });
                 this.setState({ fetch: true });
             }
@@ -69,43 +69,43 @@ export default class ManageUsuarios extends Component {
             );
         }
         return (
-            <View style={styles.principal}>
-                <Modal isVisible={this.state.isModalVisible} animationInTiming={300}>
-                    <View
-                        style={{
-                            justifyContent: 'center',
-                            alignContent: 'center',
-                            backgroundColor: 'white',
-                            height: 250
-                        }}
-                    >
-                        <View style={styles.modalTexts}>
-                            <Text>
-                                Tem certeza que deseja remover TODOS
-                                os usuários do tipo {this.state.userType}?
-                            </Text>
-                        </View>
-                        <View style={styles.containerButtons}>
-                            <TouchableOpacity
-                                style={styles.modalButtons} activeOpacity={0.9}
-                                onPress={() => this.setState({ isModalVisible: false })}
-                            >
-                                <Text style={{ color: 'white' }}>FECHAR</Text>
+           <View style={styles.principal}>
+               <Modal isVisible={this.state.isModalVisible} animationInTiming={300}>
+                   <View 
+                   style={{
+                       justifyContent: 'center',
+                       alignContent: 'center',
+                       backgroundColor: 'white', 
+                       height: 250
+                   }}
+                   > 
+                   <View style={styles.modalTexts}>
+                       <Text>
+                           Tem certeza que deseja remover TODAS
+                           as perguntas?
+                       </Text>
+                   </View>
+                   <View style={styles.containerButtons}>
+                       <TouchableOpacity
+                            style={styles.modalButtons} activeOpacity={0.9}
+                            onPress={() => this.setState({ isModalVisible: false})}
+                       >
+                            <Text style={{ color: 'white' }}>FECHAR</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.modalButtons} activeOpacity={0.9}
+                            onPress={() => this.newQuestion()}
+                        >
+                            <Text style={{ color: 'white' }}>ENVIAR</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity
-                                style={styles.modalButtons} activeOpacity={0.9}
-                                onPress={() => this.newQuestion()}
-                            >
-                                <Text style={{ color: 'white' }}>ENVIAR</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </Modal>
+                   </View>
+                   </View>
+               </Modal>
 
-                <View style={styles.perguntas}>
-                    <SectionList
+               <View style={styles.perguntas}>
+                   <SectionList
                         sections={[
-                            { data: this.state.users },
+                            { data: this.state.perguntas },
                         ]}
                         renderItem={({ item }) => (
                             <View style={styles.listRow}>
@@ -113,35 +113,41 @@ export default class ManageUsuarios extends Component {
                                     style={{ flex: 1 }} activeOpacity={0.5}
                                 >
                                     <View>
-                                        <Text style={styles.perguntasI}>{ item.nome }</Text>
-                                        <Text style={styles.materiasI}>{ item.email }</Text>
+                                        <Text style={styles.primario} > {item.titulo} </Text>
+                                            <View style={styles.secundario} >
+                                                <Text style={styles.materiasI} > {item.aluno} </Text>
+                                                <Text style={styles.materiasI} >|</Text>
+                                                <Text style={styles.materiasI} > {item.materia} </Text>
+                                            </View>
                                     </View>
                                 </TouchableOpacity>
                             </View>
                         )}
                         keyExtractor={(item, index) => index}
-                    />
-                </View>
-
-                <View style={styles.novaPergunta}>
-                    <TouchableOpacity
+                   />
+               </View>
+            
+               <View style={styles.novaPergunta}>
+                   <TouchableOpacity
                         activeOpacity={0.9} style={[styles.botao, styles.botaoBg1]}
                         onPress={() => {
-                            Actions.criarusuario({ userType: this.state.userType });
+                            alert('oi');
+                            //Actions.criarpergunta();
                         }}
-                    >
+                   >
                         <Text style={styles.txtBotao}>
-                            NOVO { this.state.userType.toUpperCase() }
+                            NOVO
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         activeOpacity={0.9} style={[styles.botao, styles.botaoBg2]}
-                        onPress={() => (this.setState({ isModalVisible: true }))}
+                        onPress={() => {this.setState({ isModalVisible: true })}}
                     >
                         <Text style={styles.txtBotao}>APAGAR TODOS</Text>
                     </TouchableOpacity>
-                </View>
-            </View>
+               </View>
+
+           </View>
         );
     }
 }
@@ -166,12 +172,16 @@ const styles = StyleSheet.create({
         flex: 1,
     },
 
-    perguntasI: {
+    primario: {
         color: 'black',
         fontSize: 14,
         marginLeft: 20,
         marginTop: 5,
         backgroundColor: 'white',
+    },
+
+    secundario: {
+        flexDirection: 'row'
     },
 
     materiasI: {

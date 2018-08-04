@@ -48,7 +48,9 @@ export default class HomeAdmin extends Component {
                     <TouchableOpacity
                         activeOpacity={0.9}
                         style={styles.button}
-                        onPress={() => (this.setState({isVisible: true}))}
+                        onPress={() => {
+                            Actions.manageperguntas();
+                        }}
                     >
                         <Text style={styles.buttonTxt}>Gerenciar Perguntas</Text>
                     </TouchableOpacity>

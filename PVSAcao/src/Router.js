@@ -9,6 +9,7 @@ import PerguntaShow from './components/PerguntaShow';
 import PerguntaDetails from './components/PerguntaDetails';
 import ManageUsuarios from './components/admin/ManageUsuarios';
 import CriarUsuario from './components/admin/CriarUsuario';
+import ManagePerguntas from './components/admin/ManagePerguntas';
 
 const Rotas = () => (
     <Router>
@@ -74,6 +75,13 @@ const Rotas = () => (
             <Scene
                 sceneStyle={{ paddingTop: 50 }}
                 key="criarusuario" component={CriarUsuario} title="Criar Usuario" hideNavBar={false}
+                navigationBarStyle={{ backgroundColor: '#3A4A9F' }}
+                titleStyle={{ color: 'white' }}
+                leftButtonIconStyle={{ tintColor: 'white' }}
+            />
+            <Scene
+                sceneStyle={{ paddingTop: 50 }}
+                key="manageperguntas" component={ManagePerguntas} title="Gerenciar Perguntas" hideNavBar={false}
                 navigationBarStyle={{ backgroundColor: '#3A4A9F' }}
                 titleStyle={{ color: 'white' }}
                 leftButtonIconStyle={{ tintColor: 'white' }}
