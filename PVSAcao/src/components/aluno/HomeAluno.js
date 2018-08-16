@@ -55,6 +55,42 @@ export default class HomeAluno extends Component {
         console.log('Entrou no metodo!');
         console.log('email do aluno é:', this.state.email);
         this.attQuestions();
+    }  
+
+    getMonitorEmail(titulo) {
+        const firestore = firebase.firestore();
+        firestore.settings({ timestampsInSnapshots: true });
+        const ref = firestore.collection('perguntas');
+        const queryA = ref.where('aluno', '==', this.state.email).where('titulo', '==', titulo);
+        queryA.get().then((querySnap) => {
+            querySnap.forEach((doc) => {
+                this.setState({ emailMontitor: doc.data().monitor });
+            });
+        });
+        Actions.perguntashow({ title: titulo, emailAluno: this.state.email, emailMonitor: this.state.emailMontitor, userId: 0 });
+    }
+
+    newQuestion() {
+        const firestore = firebase.firestore();
+        firestore.settings({ timestampsInSnapshots: true });
+        const ref = firestore.collection('perguntas');
+        ref.add({
+            aluno: this.state.email,
+            materia: this.state.questionClass,
+            monitor: ' ',
+            respondida: false,
+            titulo: this.state.questionTitle,
+        })
+            .then((doc) => {
+                console.log('Adicionada pergunta com id:', doc.id);
+                Alert.alert('Pergunta adicionada!');
+                this.setState({ tabPage: 1 });
+            })
+            .catch((error) => {
+                console.error('Erro ao adicionar pergunta:', error);
+            });
+        this.setState({ isVisible: false });
+        this.attQuestions();
     }
 
     attQuestions() {
@@ -94,41 +130,6 @@ export default class HomeAluno extends Component {
         );
     }
 
-    newQuestion() {
-        const firestore = firebase.firestore();
-        firestore.settings({ timestampsInSnapshots: true });
-        const ref = firestore.collection('perguntas');
-        ref.add({
-            aluno: this.state.email,
-            materia: this.state.questionClass,
-            monitor: ' ',
-            respondida: false,
-            titulo: this.state.questionTitle,
-        })
-            .then((doc) => {
-                console.log('Adicionada pergunta com id:', doc.id);
-                Alert.alert('Pergunta adicionada!');
-                this.setState({ tabPage: 1 });
-            })
-            .catch((error) => {
-                console.error('Erro ao adicionar pergunta:', error);
-            });
-        this.setState({ isVisible: false });
-        this.attQuestions();
-    }
-
-    getMonitorEmail(titulo) {
-        const firestore = firebase.firestore();
-        firestore.settings({ timestampsInSnapshots: true });
-        const ref = firestore.collection('perguntas');
-        const queryA = ref.where('aluno', '==', this.state.email).where('titulo', '==', titulo);
-        queryA.get().then((querySnap) => {
-            querySnap.forEach((doc) => {
-                this.setState({ emailMontitor: doc.data().monitor });
-            });
-        });
-        Actions.perguntashow({ title: titulo, emailAluno: this.state.email, emailMonitor: this.state.emailMontitor, userId: 0 });
-    }
 
     render() {
         console.log('render chamado');

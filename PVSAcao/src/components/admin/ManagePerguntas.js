@@ -26,6 +26,7 @@ export default class ManagePerguntas extends Component {
             isModalVisible: false
         };
         this.getPerguntas = this.getPerguntas.bind(this);
+        this.removeAllPerguntas = this.removeAllPerguntas.bind(this);
     }
 
     componentWillMount() {
@@ -43,7 +44,6 @@ export default class ManagePerguntas extends Component {
     }
 
     getPerguntas() {
-        this.setState({ users: [] });
         console.log('Pegando perguntas');
         const firestore = firebase.firestore();
         firestore.settings({ timestampsInSnapshots: true });
@@ -51,9 +51,36 @@ export default class ManagePerguntas extends Component {
 
         ref.get().then(
             (querySnap) => {
+                if (querySnap.docs.length === 0) {
+                    alert('Sem perguntas!');
+                    this.setState({ fetch: true });
+                } else {
+                    querySnap.forEach((doc) => {
+                        this.setState({ 
+                            perguntas: this.state.perguntas.concat(Object.assign({ email: doc.aluno }, doc.data())) 
+                        });
+                        console.log(doc.data());
+                    });
+                    this.setState({ fetch: true });
+                }
+            }
+        );
+    }
+
+    removeAllPerguntas() {
+        this.setState({ fetch: false });
+        console.log('Deletando todas as perguntas');
+        const firestore = firebase.firestore();
+        firestore.settings({ timestampsInSnapshots: true });
+        const ref = firestore.collection('perguntas');
+
+        ref.get().then(
+            (querySnap) => {
                 querySnap.forEach((doc) => {
-                    this.setState({ perguntas: this.state.perguntas.concat(Object.assign({ email: doc.aluno }, doc.data())) });
-                    console.log(doc.data());
+                    this.setState({ perguntas: [] });
+                    ref.doc(doc.id).delete().then(() => {
+                        console.log('Deletada pergunta:', doc.titulo);
+                    });
                 });
                 this.setState({ fetch: true });
             }
@@ -76,12 +103,15 @@ export default class ManagePerguntas extends Component {
                        justifyContent: 'center',
                        alignContent: 'center',
                        backgroundColor: 'white', 
-                       height: 250
+                       height: 200,
+                       borderRadius: 5
                    }}
                    > 
-                   <View style={styles.modalTexts}>
-                       <Text>
-                           Tem certeza que deseja remover TODAS
+                   <View  
+                        style={styles.modalTexts}                        
+                   >
+                       <Text style={styles.modalTexts} >
+                           Tem certeza que deseja remover todas
                            as perguntas?
                        </Text>
                    </View>
@@ -94,9 +124,9 @@ export default class ManagePerguntas extends Component {
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={styles.modalButtons} activeOpacity={0.9}
-                            onPress={() => this.newQuestion()}
+                            onPress={() => this.removeAllPerguntas()}
                         >
-                            <Text style={{ color: 'white' }}>ENVIAR</Text>
+                            <Text style={{ color: 'white' }}>APAGAR</Text>
                             </TouchableOpacity>
                    </View>
                    </View>
@@ -115,8 +145,7 @@ export default class ManagePerguntas extends Component {
                                     <View>
                                         <Text style={styles.primario} > {item.titulo} </Text>
                                             <View style={styles.secundario} >
-                                                <Text style={styles.materiasI} > {item.aluno} </Text>
-                                                <Text style={styles.materiasI} >|</Text>
+                                                <Text style={styles.materiasJ} > {item.aluno} </Text>
                                                 <Text style={styles.materiasI} > {item.materia} </Text>
                                             </View>
                                     </View>
@@ -127,18 +156,7 @@ export default class ManagePerguntas extends Component {
                    />
                </View>
             
-               <View style={styles.novaPergunta}>
-                   <TouchableOpacity
-                        activeOpacity={0.9} style={[styles.botao, styles.botaoBg1]}
-                        onPress={() => {
-                            alert('oi');
-                            //Actions.criarpergunta();
-                        }}
-                   >
-                        <Text style={styles.txtBotao}>
-                            NOVO
-                        </Text>
-                    </TouchableOpacity>
+               <View style={styles.novaPergunta}>                   
                     <TouchableOpacity
                         activeOpacity={0.9} style={[styles.botao, styles.botaoBg2]}
                         onPress={() => {this.setState({ isModalVisible: true })}}
@@ -188,6 +206,14 @@ const styles = StyleSheet.create({
         color: '#9BAAAD',
         fontSize: 12,
         marginLeft: 20,
+        borderLeftWidth: 1,
+        paddingLeft: 20        
+    },
+
+    materiasJ: {
+        color: '#9BAAAD',
+        fontSize: 12,
+        marginLeft: 20,   
     },
 
     novaPergunta: {
@@ -226,7 +252,7 @@ const styles = StyleSheet.create({
     modalButtons: {
         margin: 10,
         backgroundColor: '#616EB2',
-        borderRadius: 2,
+        borderRadius: 3,
         alignItems: 'center',
         justifyContent: 'center',
         height: 30,
@@ -238,5 +264,9 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginRight: 20,
     },
+
+    modalTexts: {
+        margin: 10
+    }
 
 });
