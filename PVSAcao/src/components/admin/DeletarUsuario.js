@@ -7,30 +7,29 @@ import {
     TouchableOpacity,
     View,
     Picker,
-    Alert
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Modal from 'react-native-modal';
-
 import keys from '../../config/keys';
 import constantes from '../../config/constants';
 
 const firebase = require('firebase');
 require('firebase/firestore');
 
-export default class CriarUsuario extends Component {
+export default class DeletarUsuario extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             userType: this.props.userType,
-            nome: '',
-            email: '',
+            nome: this.props.userName,
+            email: this.props.userEmail,
             materia: '',
-            turma: '',
+            turma: this.props.userTurma,
             conexao: '',
             ocupado: false
         };
+        this.removeUser = this.removeUser.bind(this);
     }
 
     componentWillMount() {
@@ -50,61 +49,49 @@ export default class CriarUsuario extends Component {
         }
     }
 
+    removeUser() {
+        console.log('Deletando o usuario!');
+        const firestore = firebase.firestore();
+        firestore.settings({ timestampsInSnapshots: true });
+        const ref = firestore.collection('usuarios');
+        const queryUsers = ref.where('tipo', '==', this.state.userType).where('nome', '==', this.state.nome);
 
-    salvarUsuario() {
-        this.setState({ ocupado: true });
-        this.registrarUsuarioParaAutenticacao();
-    }
-
-    registrarUsuarioParaAutenticacao() {
-        const email = this.state.email;
-        const password = 'pvs123';
-
-        const user = this.state.conexao.auth();
-
-        user.createUserWithEmailAndPassword(email, password)
-            .then(
-                () => {
-                    //Sucesso no registro de autenticação
-                    this.registrarDadosDoUsuario();
-                }
-            )
-            .catch(
-            (erro) => {
-                this.setState({ ocupado: false });
-                alert('Erro durante o cadastro do usuário: ', erro.message);
+        queryUsers.get().then(
+            (querySnap) => {
+                querySnap.forEach((doc) => {
+                    if (doc.id == this.state.email) {
+                        ref.doc(doc.id).delete().then(() => {
+                            alert('Usuario deletado');
+                            console.log('Usuario deletado');
+                            Actions.pop();
+                        });
+                    }
+                });
             }
         );
     }
 
+    atualizarUsuario() {
+        console.log('Atualizando o usuario!');
+        const firestore = firebase.firestore();
+        firestore.settings({ timestampsInSnapshots: true });
+        const ref = firestore.collection('usuarios');
+        const queryUsers = ref.where('tipo', '==', this.state.userType).where('nome', '==', this.state.nome);
 
-    registrarDadosDoUsuario() {
-        const usuarios = firebase.firestore().collection('usuarios');
-        const novoUsuario = {
-            nome: this.state.nome,
-            tipo: this.state.userType.toLowerCase()
-        };
-
-        if (this.state.userType.toLowerCase() === 'aluno') {
-            novoUsuario.turma = this.state.turma;
-        } else if (this.state.userType.toLowerCase() === 'monitor') {
-            novoUsuario.materia = this.state.materia;
-        }
-
-        usuarios.doc(this.state.email).set(novoUsuario)
-            .then(
-                () => {
-                    alert('Usuario criado com sucesso! Email registrado: ', this.state.email);
-                    this.setState({ ocupado: false });
-                    Actions.pop();
-                }
-            )
-            .catch(
-                (erro) => {
-                    alert('Erro na segunda etapa de cadastro: ', erro.message);
-                    this.setState({ ocupado: false });
-                }
-            );
+        queryUsers.get().then(
+            (querySnap) => {
+                querySnap.forEach((doc) => {
+                    if (doc.id == this.state.email) {
+                        ref.doc(doc.id).update({
+                            nome: this.state.nome,
+                            turma: this.state.turma
+                        });
+                        console.log('Usuario atualizado');
+                        alert('Usuario atualizado!');
+                    }
+                });
+            }
+        );
     }
 
 
@@ -118,7 +105,8 @@ export default class CriarUsuario extends Component {
                 </Modal>
                 <View>
                     <Text style={styles.tituloCampo}>Nome:</Text>
-                    <TextInput
+                    <TextInput         
+                        defaultValue={this.state.userName}               
                         style={styles.entradaTexto}
                         onChangeText={(novoNome) => this.setState({ nome: novoNome })}
                         value={this.state.nome}
@@ -161,17 +149,31 @@ export default class CriarUsuario extends Component {
                         </View>
                     }
                     { !this.state.ocupado &&
-                        <TouchableOpacity
-                            style={styles.botao}
-                            activeOpacity={0.9}
-                            onPress={
-                                () => {
-                                    this.salvarUsuario();
+                       <View style={styles.viewBtns} >
+                            <TouchableOpacity
+                                style={[styles.botao, { backgroundColor: '#09af00' }]}
+                                activeOpacity={0.9}
+                                onPress={
+                                    () => {
+                                        this.atualizarUsuario();
+                                    }
                                 }
-                            }
-                        >
-                            <Text style={styles.txtBotao}>REGISTRAR</Text>
-                        </TouchableOpacity>
+                            >
+                                <Text style={styles.txtBotao}>ATUALIZAR</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={[styles.botao, { backgroundColor: '#c33d26' }] }
+                                activeOpacity={0.9}
+                                onPress={
+                                    () => {
+                                        this.removeUser();
+                                    }
+                                }
+                            >
+                                <Text style={styles.txtBotao}>DELETAR</Text>
+                            </TouchableOpacity>
+                        </View>
                     }
                 </View>
             </View>
@@ -199,15 +201,23 @@ const styles = StyleSheet.create({
     botao: {
         margin: 10,
         height: 50,
+        width: 90,
+        borderRadius: 3,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#616EB2',
     },
 
     txtBotao: {
         fontWeight: 'bold',
         fontSize: 14,
         color: 'white',
+    },
+
+    viewBtns: {
+        marginTop: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row'
     },
 
 });

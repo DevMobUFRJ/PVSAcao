@@ -26,6 +26,7 @@ export default class ManageUsuarios extends Component {
             isModalVisible: false
         };
         this.getUsers = this.getUsers.bind(this);
+        this.removeAllUsers = this.removeAllUsers.bind(this);
     }
 
     componentWillMount() {
@@ -60,6 +61,27 @@ export default class ManageUsuarios extends Component {
         );
     }
 
+    removeAllUsers() {
+        this.setState({ fetch: false });
+        console.log('Deletando todos os usuarios do tipo: ', this.state.userType);
+        const firestore = firebase.firestore();
+        firestore.settings({ timestampsInSnapshots: true });
+        const ref = firestore.collection('usuarios');
+        const queryUsers = ref.where('tipo', '==', this.state.userType);
+
+        queryUsers.get().then(
+            (querySnap) => {
+                querySnap.forEach((doc) => {
+                    this.setState({ users: [] });
+                    queryUsers.doc(doc.id).delete().then(() => {
+                        console.log('Deletado o usuario: ', doc.nome);
+                    });
+                });
+                this.setState({ fetch: true });
+            }
+        );
+    }   
+
     render() {
         if (!this.state.fetch) {
             return (
@@ -75,12 +97,13 @@ export default class ManageUsuarios extends Component {
                         style={{
                             justifyContent: 'center',
                             alignContent: 'center',
-                            backgroundColor: 'white',
-                            height: 250
+                            backgroundColor: 'white', 
+                            height: 200,
+                            borderRadius: 5
                         }}
                     >
                         <View style={styles.modalTexts}>
-                            <Text>
+                            <Text style={styles.modalTexts} >
                                 Tem certeza que deseja remover TODOS
                                 os usuários do tipo {this.state.userType}?
                             </Text>
@@ -94,9 +117,9 @@ export default class ManageUsuarios extends Component {
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={styles.modalButtons} activeOpacity={0.9}
-                                onPress={() => this.newQuestion()}
+                                onPress={() => this.removeAllUsers()}
                             >
-                                <Text style={{ color: 'white' }}>ENVIAR</Text>
+                                <Text style={{ color: 'white' }}>APAGAR</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -111,6 +134,9 @@ export default class ManageUsuarios extends Component {
                             <View style={styles.listRow}>
                                 <TouchableOpacity
                                     style={{ flex: 1 }} activeOpacity={0.5}
+                                    onPress={() => {
+                                        Actions.deletarusuario({ userType: this.state.userType, userName: item.nome, userEmail: item.email, userTurma: item.turma });
+                                    }}
                                 >
                                     <View>
                                         <Text style={styles.perguntasI}>{ item.nome }</Text>
@@ -228,5 +254,9 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginRight: 20,
     },
+
+    modalTexts: {
+        margin: 10
+    }
 
 });
