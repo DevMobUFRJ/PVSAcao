@@ -8,7 +8,6 @@ import {
     ActivityIndicator
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import ScrollableTabView, { ScrollableTabBar,  } from 'react-native-scrollable-tab-view';
 import Modal from 'react-native-modal';
 import keys from '../../config/keys';
 
@@ -44,6 +43,7 @@ export default class ManageUsuarios extends Component {
     }
 
     getUsers() {
+        this.setState({ fetch: false });
         this.setState({ users: [] });
         console.log('Pegando usuarios');
         const firestore = firebase.firestore();
@@ -62,7 +62,6 @@ export default class ManageUsuarios extends Component {
     }
 
     removeAllUsers() {
-        this.setState({ fetch: false });
         console.log('Deletando todos os usuarios do tipo: ', this.state.userType);
         const firestore = firebase.firestore();
         firestore.settings({ timestampsInSnapshots: true });
@@ -71,13 +70,13 @@ export default class ManageUsuarios extends Component {
 
         queryUsers.get().then(
             (querySnap) => {
-                querySnap.forEach((doc) => {
-                    this.setState({ users: [] });
-                    queryUsers.doc(doc.id).delete().then(() => {
+                querySnap.forEach((doc) => {                    
+                    ref.doc(doc.id).delete().then(() => {
                         console.log('Deletado o usuario: ', doc.nome);
                     });
                 });
                 this.setState({ fetch: true });
+                this.setState({ users: [] });
             }
         );
     }   
