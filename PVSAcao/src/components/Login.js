@@ -6,7 +6,8 @@ import {
     Image,
     TextInput,
     TouchableOpacity,
-    ActivityIndicator
+    ActivityIndicator,
+    Alert
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import Modal from 'react-native-modal';
@@ -107,39 +108,63 @@ export default class Login extends Component {
     }
 
     render() {
-        const {container, img, texto, VLogo, Cdados, TxtInput, botao, Txtbotao} = styles;
+        const {container, img, texto, VLogo, Cdados, TxtInput, botao, Txtbotao, txtEsqSenha } = styles;
         return (
             <View style={container}>
                 <Modal isVisible={this.state.isVisible} animationInTiming={1}>
-                    <View style={{flex: 1, justifyContent: 'center', alignContent: 'center',}}>
-                        <ActivityIndicator size='large' color='white'/>
+                    <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }}>
+                        <ActivityIndicator size='large' color='white' />
                     </View>
                 </Modal>
                 <View style={VLogo}>
-                    <Image style={img} source={logo}/>
+                    <Image style={img} source={logo} />
                     <Text style={texto}>Pré Vestibular Social</Text>
                 </View>
 
                 <View style={Cdados}>
-                    <TextInput style={TxtInput} placeholder="Email" keyboardType='email-address'
-                               onChangeText={(e) => {
-                                   this.setState({email: e});
-                               }}
+                    <TextInput 
+                        style={TxtInput} placeholder="Email" keyboardType='email-address'
+                        onChangeText={(e) => {
+                            this.setState({ email: e });
+                        }}
                     />
-                    <TextInput style={TxtInput} placeholder="Senha" secureTextEntry
-                               onChangeText={(s) => {
-                                   this.setState({password: s});
-                               }}
+                    <TextInput 
+                        style={TxtInput} placeholder="Senha" secureTextEntry
+                        onChangeText={(s) => {
+                            this.setState({ password: s });
+                        }}
                     />
-                </View>
+                    <TouchableOpacity
+                    activeOpacity={0.9}
+                    style={txtEsqSenha}
+                    onPress={
+                        () => {
+                            if (this.state.email === '') {
+                                Alert.alert('Digite seu email no campo correspondente!');
+                            } else {
+                                firebase.auth()
+                                    .sendPasswordResetEmail(this.state.email).then(() => {
+                                        console.log('Email de redefinição de senha enviado.');
+                                        Alert.alert('Email enviado.');
+                                    }).catch((error) => {
+                                        console.log(error);
+                                        Alert.alert('Erro ao enviar email.');
+                                    });
+                                }
+                            }
+                        }
+                    >
+                    <Text style={[Txtbotao, { color: 'black' }]}>Esqueci a senha</Text>
+                </TouchableOpacity>
+                </View>                
 
                 <TouchableOpacity
                     activeOpacity={0.9}
                     style={botao}
                     onPress={
                         () => {
-                            if (this.state.email == '') {
-                                alert('Email vazio!');
+                            if (this.state.email === '') {
+                                Alert.alert('Email vazio!');
                             } else {
                                 this.loginUser();
                             }
@@ -167,8 +192,6 @@ const styles = StyleSheet.create({
         margin: 30,
         marginBottom: 100,
     },
-
-    TxtInput: {},
 
     VLogo: {
         marginTop: 20,
@@ -201,5 +224,10 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: 'white',
     },
+
+    txtEsqSenha: {
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+    }
 
 });
