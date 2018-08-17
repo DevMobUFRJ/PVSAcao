@@ -10,6 +10,7 @@ import {
 import { Actions } from 'react-native-router-flux';
 import Modal from 'react-native-modal';
 import keys from '../../config/keys';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 
 const firebase = require('firebase');
 require('firebase/firestore');
@@ -22,7 +23,8 @@ export default class ManageUsuarios extends Component {
             fetch: false,
             userType: this.props.userType,
             users: [],
-            isModalVisible: false
+            isModalVisible: false,
+            att: false
         };
         this.getUsers = this.getUsers.bind(this);
         this.removeAllUsers = this.removeAllUsers.bind(this);
@@ -39,6 +41,10 @@ export default class ManageUsuarios extends Component {
                 messagingSenderId: keys.REACT_APP_PVS_FIREBASE_SENDER_ID
             });
         }
+        this.getUsers();
+    }
+
+    onSwipeDown(gestureState) {
         this.getUsers();
     }
 
@@ -79,7 +85,7 @@ export default class ManageUsuarios extends Component {
                 this.setState({ users: [] });
             }
         );
-    }   
+    }      
 
     render() {
         if (!this.state.fetch) {
@@ -89,8 +95,13 @@ export default class ManageUsuarios extends Component {
                 </View>
             );
         }
+        const config = {
+            velocityThreshold: 0.3,
+            directionalOffsetThreshold: 80
+        };
         return (
-            <View style={styles.principal}>
+                        
+            <View style={styles.principal}>               
                 <Modal isVisible={this.state.isModalVisible} animationInTiming={300}>
                     <View
                         style={{
@@ -123,8 +134,11 @@ export default class ManageUsuarios extends Component {
                         </View>
                     </View>
                 </Modal>
-
                 <View style={styles.perguntas}>
+                    <GestureRecognizer
+                        onSwipeDown={(state) => this.onSwipeDown(state)}
+                        config={config}
+                    >
                     <SectionList
                         sections={[
                             { data: this.state.users },
@@ -146,6 +160,7 @@ export default class ManageUsuarios extends Component {
                         )}
                         keyExtractor={(item, index) => index}
                     />
+                    </GestureRecognizer>
                 </View>
 
                 <View style={styles.novaPergunta}>
@@ -166,7 +181,7 @@ export default class ManageUsuarios extends Component {
                         <Text style={styles.txtBotao}>APAGAR TODOS</Text>
                     </TouchableOpacity>
                 </View>
-            </View>
+            </View>            
         );
     }
 }
