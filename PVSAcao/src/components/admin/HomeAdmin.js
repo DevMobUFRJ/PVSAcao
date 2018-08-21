@@ -6,6 +6,7 @@ import {
     TouchableOpacity
 } from 'react-native';
 import { Actions } from 'react-native-router-flux/index';
+import { Button } from 'react-native-elements';
 
 export default class HomeAdmin extends Component {
     constructor(props) {
@@ -22,39 +23,36 @@ export default class HomeAdmin extends Component {
     render() {
         return (
             <View style={styles.main}>
-                <View style={[styles.row, styles.bg1]}>
-                    <TouchableOpacity
-                        activeOpacity={0.9}
-                        style={styles.button}
-                        onPress={() => {
-                            Actions.manageusuarios({ userType: 'aluno' });
-                        }}
-                    >
-                        <Text style={styles.buttonTxt}>Gerenciar Alunos</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={[styles.row, styles.bg2]}>
-                    <TouchableOpacity
-                        activeOpacity={0.9}
-                        style={styles.button}
-                        onPress={() => {
-                            Actions.manageusuarios({ userType: 'monitor' });
-                        }}
-                    >
-                        <Text style={styles.buttonTxt}>Gerenciar Monitores</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={[styles.row, styles.bg3]}>
-                    <TouchableOpacity
-                        activeOpacity={0.9}
-                        style={styles.button}
-                        onPress={() => {
-                            Actions.manageperguntas();
-                        }}
-                    >
-                        <Text style={styles.buttonTxt}>Gerenciar Perguntas</Text>
-                    </TouchableOpacity>
-                </View>
+                <Button
+                    raised
+                    large
+                    rightIcon={{name: 'school'}}
+                    title='Gerenciar Alunos'
+                    buttonStyle={[styles.button, styles.bg1]}
+                    onPress={() => {
+                        Actions.manageusugit arios({ userType: 'aluno' });
+                    }}
+                />
+                <Button
+                    raised
+                    large
+                    rightIcon={{name: 'user-circle', type: 'font-awesome'}}
+                    title='Gerenciar Monitores'
+                    buttonStyle={[styles.buttonMargin, styles.bg2]}
+                    onPress={() => {
+                        Actions.manageusuarios({ userType: 'monitor' });
+                    }}
+                />
+                <Button
+                    raised
+                    large
+                    rightIcon={{name: 'help'}}
+                    title='Gerenciar Perguntas'
+                    buttonStyle={[styles.buttonMargin, styles.bg3]}
+                    onPress={() => {
+                        Actions.manageperguntas();
+                    }}
+                />
             </View>
         );
     }
@@ -64,27 +62,18 @@ const styles = StyleSheet.create({
     main: {
         flex: 1,
         backgroundColor: 'white',
-    },
-    row: {
-        flex: 1
+        justifyContent: 'center',
     },
     bg1: {
-        backgroundColor: '#dd6060'
+        backgroundColor: '#00d1dc'
     },
     bg2: {
-        backgroundColor: '#ceaa33'
+        backgroundColor: '#00a4dc'
     },
     bg3: {
-        backgroundColor: '#719Ed2'
+        backgroundColor: '#0062d2'
     },
-    button: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    buttonTxt: {
-        fontWeight: 'bold',
-        fontSize: 16,
-        color: 'white'
+    buttonMargin: {
+        marginTop: 15
     }
 });
