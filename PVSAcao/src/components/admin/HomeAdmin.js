@@ -30,7 +30,7 @@ export default class HomeAdmin extends Component {
                     title='Gerenciar Alunos'
                     buttonStyle={[styles.button, styles.bg1]}
                     onPress={() => {
-                        Actions.manageusugit arios({ userType: 'aluno' });
+                        Actions.manageusuarios({ userType: 'aluno' });
                     }}
                 />
                 <Button
