@@ -60,13 +60,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     bg1: {
-        backgroundColor: '#00d1dc'
+        backgroundColor: '#00c5dc'
     },
     bg2: {
         backgroundColor: '#00a4dc'
     },
     bg3: {
-        backgroundColor: '#0062d2'
+        backgroundColor: '#0069d2'
     },
     buttonMargin: {
         marginTop: 15
