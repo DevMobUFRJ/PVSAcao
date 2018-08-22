@@ -45,10 +45,6 @@ export default class ManageUsuarios extends Component {
         this.getUsers();
     }
 
-    componentDidMount() {
-        this.getUsers();
-    }
-
     onSwipeDown() {
         this.getUsers();
     }
