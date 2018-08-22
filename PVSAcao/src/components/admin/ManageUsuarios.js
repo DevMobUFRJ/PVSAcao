@@ -24,7 +24,8 @@ export default class ManageUsuarios extends Component {
             userType: this.props.userType,
             users: [],
             isModalVisible: false,
-            att: false
+            att: false,
+            test: this.props.test
         };
         this.getUsers = this.getUsers.bind(this);
         this.removeAllUsers = this.removeAllUsers.bind(this);
@@ -44,7 +45,11 @@ export default class ManageUsuarios extends Component {
         this.getUsers();
     }
 
-    onSwipeDown(gestureState) {
+    componentDidMount() {
+        this.getUsers();
+    }
+
+    onSwipeDown() {
         this.getUsers();
     }
 

@@ -76,16 +76,23 @@ export default class DeletarUsuario extends Component {
         const firestore = firebase.firestore();
         firestore.settings({ timestampsInSnapshots: true });
         const ref = firestore.collection('usuarios');
-        const queryUsers = ref.where('tipo', '==', this.state.userType).where('nome', '==', this.state.nome);
+        const queryUsers = ref.where('tipo', '==', this.state.userType);
 
         queryUsers.get().then(
             (querySnap) => {
                 querySnap.forEach((doc) => {
                     if (doc.id == this.state.email) {
-                        ref.doc(doc.id).update({
-                            nome: this.state.nome,
-                            turma: this.state.turma
-                        });
+                        if (this.state.userType == 'aluno') {
+                            ref.doc(doc.id).update({
+                                nome: this.state.nome,
+                                turma: this.state.turma
+                            });
+                        } else {
+                            ref.doc(doc.id).update({
+                                nome: this.state.nome,
+                                materia: this.state.materia
+                            });
+                        }
                         console.log('Usuario atualizado');
                         alert('Usuario atualizado!');
                     }
