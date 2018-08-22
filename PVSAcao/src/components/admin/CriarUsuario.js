@@ -26,7 +26,7 @@ export default class CriarUsuario extends Component {
             userType: this.props.userType,
             nome: '',
             email: '',
-            materia: '',
+            materia: 'Biologia',
             turma: '',
             conexao: '',
             ocupado: false

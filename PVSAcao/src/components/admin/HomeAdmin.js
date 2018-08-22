@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import {
     StyleSheet,
-    Text,
     View,
-    TouchableOpacity
 } from 'react-native';
 import { Actions } from 'react-native-router-flux/index';
 import { Button } from 'react-native-elements';
@@ -15,9 +13,6 @@ export default class HomeAdmin extends Component {
         this.state = {
             email: this.props.email
         };
-    }
-
-    componentWillMount() {
     }
 
     render() {

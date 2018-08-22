@@ -24,7 +24,7 @@ export default class DeletarUsuario extends Component {
             userType: this.props.userType,
             nome: this.props.userName,
             email: this.props.userEmail,
-            materia: '',
+            materia: this.props.userMateria,
             turma: this.props.userTurma,
             conexao: '',
             ocupado: false

@@ -12,7 +12,8 @@ import CriarUsuario from './components/admin/CriarUsuario';
 import ManagePerguntas from './components/admin/ManagePerguntas';
 import DeletarUsuario from './components/admin/DeletarUsuario';
 
-const Rotas = () => (
+const Rotas = () => (    
+
     <Router>
         <Stack key="root" >
 

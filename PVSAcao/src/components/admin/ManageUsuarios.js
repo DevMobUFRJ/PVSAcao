@@ -148,7 +148,7 @@ export default class ManageUsuarios extends Component {
                                 <TouchableOpacity
                                     style={{ flex: 1 }} activeOpacity={0.5}
                                     onPress={() => {
-                                        Actions.deletarusuario({ userType: this.state.userType, userName: item.nome, userEmail: item.email, userTurma: item.turma });
+                                        Actions.deletarusuario({ userType: this.state.userType, userName: item.nome, userEmail: item.email, userTurma: item.turma, userMateria: item.materia });
                                     }}
                                 >
                                     <View>
