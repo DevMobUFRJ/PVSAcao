@@ -123,7 +123,7 @@ export default class Login extends Component {
 
                 <View style={Cdados}>
                     <TextInput 
-                        style={TxtInput} placeholder="Email" keyboardType='email-address'
+                        style={TxtInput} placeholder="Email" keyboardType='email-address' autoFocus
                         onChangeText={(e) => {
                             this.setState({ email: e });
                         }}
@@ -140,12 +140,12 @@ export default class Login extends Component {
                     onPress={
                         () => {
                             if (this.state.email === '') {
-                                Alert.alert('Digite seu email no campo correspondente!');
+                                Alert.alert('Por favor, preencha seu email');
                             } else {
                                 firebase.auth()
                                     .sendPasswordResetEmail(this.state.email).then(() => {
                                         console.log('Email de redefinição de senha enviado.');
-                                        Alert.alert('Email enviado.');
+                                        Alert.alert('Clique no link enviado ao seu email para mudar sua senha');
                                     }).catch((error) => {
                                         console.log(error);
                                         Alert.alert('Erro ao enviar email.');
