@@ -213,7 +213,6 @@ export default class PerguntaShow extends Component {
           </View>
       );
   }
-    //alert('oi');
     return (  
         <GiftedChat placeholder='Escreva sua mensagem...' messages={this.state.messages} 
         onSend={messages => this.onSend(messages)} user={{ _id: this.state.userId }}

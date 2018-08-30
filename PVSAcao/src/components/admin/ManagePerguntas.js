@@ -5,10 +5,11 @@ import {
     View,
     TouchableOpacity,
     SectionList,
-    ActivityIndicator
+    ActivityIndicator,
+    Alert
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import ScrollableTabView, { ScrollableTabBar,  } from 'react-native-scrollable-tab-view';
+import ScrollableTabView, { ScrollableTabBar, } from 'react-native-scrollable-tab-view';
 import Modal from 'react-native-modal';
 import keys from '../../config/keys';
 
@@ -52,7 +53,7 @@ export default class ManagePerguntas extends Component {
         ref.get().then(
             (querySnap) => {
                 if (querySnap.docs.length === 0) {
-                    alert('Sem perguntas!');
+                    Alert.alert('Sem perguntas!');
                     this.setState({ fetch: true });
                 } else {
                     querySnap.forEach((doc) => {

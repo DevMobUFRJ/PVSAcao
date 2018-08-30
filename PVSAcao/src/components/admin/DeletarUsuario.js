@@ -7,6 +7,7 @@ import {
     TouchableOpacity,
     View,
     Picker,
+    Alert
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Modal from 'react-native-modal';
@@ -61,7 +62,7 @@ export default class DeletarUsuario extends Component {
                 querySnap.forEach((doc) => {
                     if (doc.id == this.state.email) {
                         ref.doc(doc.id).delete().then(() => {
-                            alert('Usuario deletado');
+                            Alert.alert('Usuario deletado');
                             console.log('Usuario deletado');
                             Actions.pop();
                         });
@@ -94,7 +95,7 @@ export default class DeletarUsuario extends Component {
                             });
                         }
                         console.log('Usuario atualizado');
-                        alert('Usuario atualizado!');
+                        Alert.alert('Usuario atualizado!');
                     }
                 });
             }

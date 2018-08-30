@@ -72,7 +72,7 @@ export default class CriarUsuario extends Component {
             .catch(
             (erro) => {
                 this.setState({ ocupado: false });
-                alert('Erro durante o cadastro do usuário: ', erro.message);
+                Alert.alert('Erro durante o cadastro do usuário: ', erro.message);
             }
         );
     }
@@ -94,14 +94,14 @@ export default class CriarUsuario extends Component {
         usuarios.doc(this.state.email).set(novoUsuario)
             .then(
                 () => {
-                    alert('Usuario criado com sucesso! Email registrado: ', this.state.email);
+                    Alert.alert('Usuario criado com sucesso! Email registrado: ', this.state.email);
                     this.setState({ ocupado: false });
                     Actions.pop();
                 }
             )
             .catch(
                 (erro) => {
-                    alert('Erro na segunda etapa de cadastro: ', erro.message);
+                    Alert.alert('Erro na segunda etapa de cadastro: ', erro.message);
                     this.setState({ ocupado: false });
                 }
             );
