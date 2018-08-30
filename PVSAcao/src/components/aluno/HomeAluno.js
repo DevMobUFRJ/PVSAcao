@@ -57,7 +57,7 @@ export default class HomeAluno extends Component {
         this.attQuestions();
     }  
 
-    getMonitorEmail(titulo) {
+    getMonitorEmail(titulo, materia) {
         const firestore = firebase.firestore();
         firestore.settings({ timestampsInSnapshots: true });
         const ref = firestore.collection('perguntas');
@@ -67,7 +67,7 @@ export default class HomeAluno extends Component {
                 this.setState({ emailMontitor: doc.data().monitor });
             });
         });
-        Actions.perguntashow({ title: titulo, emailAluno: this.state.email, emailMonitor: this.state.emailMontitor, userId: 0 });
+        Actions.perguntashow({ title: titulo, materia, emailAluno: this.state.email, emailMonitor: this.state.emailMontitor, userId: 0 });
     }
 
     newQuestion() {
@@ -107,7 +107,7 @@ export default class HomeAluno extends Component {
             (querySnap) => {
                 querySnap.forEach((doc) => {
                     console.log(doc.id, '=>', doc.data());
-                    const perguntaR = this.state.questionsA.concat(doc.data().titulo);
+                    const perguntaR = this.state.questionsA.concat(doc.data());
                     this.setState({ questionsA: perguntaR });
                 });
                 console.log(this.state.questionsA);
@@ -120,7 +120,7 @@ export default class HomeAluno extends Component {
             (querySnap) => {
                 querySnap.forEach((doc) => {
                     console.log(doc.id, '=>', doc.data());
-                    const perguntaE = this.state.questionsW.concat(doc.data().titulo);
+                    const perguntaE = this.state.questionsW.concat(doc.data());
                     this.setState({ questionsW: perguntaE });
                 });
                 console.log(this.state.questionsW);
@@ -205,12 +205,12 @@ export default class HomeAluno extends Component {
                                     <TouchableOpacity
                                     style={{ flex: 1 }} activeOpacity={0.5} 
                                     onPress={() => {
-                                        this.getMonitorEmail(item);
+                                        this.getMonitorEmail(item.titulo, item.materia);
                                     }}
                                     >
                                         <View>
-                                            <Text style={perguntasI}>{item}</Text>
-                                            <Text style={materiasI}>Matéria</Text>
+                                            <Text style={perguntasI}>{item.titulo}</Text>
+                                            <Text style={materiasI}>{item.materia}</Text>
                                         </View>
                                     </TouchableOpacity>
                                 </View>
@@ -227,13 +227,14 @@ export default class HomeAluno extends Component {
                             renderItem={({ item }) => (
                                 <View style={listRow}>
                                     <TouchableOpacity
-                                    style={{ flex: 1 }} activeOpacity={0.5} onPress={() => {
-                                        this.getMonitorEmail(item);
+                                    style={{ flex: 1 }} activeOpacity={0.5} 
+                                    onPress={() => {
+                                        this.getMonitorEmail(item.titulo, item.materia);
                                     }}
                                     >
                                         <View>
-                                            <Text style={perguntasI}>{item}</Text>
-                                            <Text style={materiasI}>Matéria</Text>
+                                            <Text style={perguntasI}>{item.titulo}</Text>
+                                            <Text style={materiasI}>{item.materia}</Text>
                                         </View>
                                     </TouchableOpacity>
                                 </View>

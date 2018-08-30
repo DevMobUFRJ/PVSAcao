@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     StyleSheet,
     Text,
@@ -9,7 +9,7 @@ import {
     ActivityIndicator,
     Alert
 } from 'react-native';
-import {Actions} from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 import Modal from 'react-native-modal';
 import keys from '../config/keys';
 

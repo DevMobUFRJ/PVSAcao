@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, ActivityIndicator, View } from 'react-native';
-import { GiftedChat } from 'react-native-gifted-chat';
+import { ActivityIndicator, View } from 'react-native';
+import { GiftedChat, Actions } from 'react-native-gifted-chat';
 import keys from '../config/keys';
 
 const firebase = require('firebase');
@@ -14,6 +14,7 @@ export default class PerguntaShow extends Component {
       emailAluno: this.props.emailAluno,
       emailMonitor: this.props.emailMonitor,
       titulo: this.props.title,
+      materia: this.props.materia,
       messages: [],
       fetch: false,
       messageId: '',
@@ -23,6 +24,7 @@ export default class PerguntaShow extends Component {
     this.attMsgs = this.attMsgs.bind(this);
     this.onReceive = this.onReceive.bind(this);
     this.onSend = this.onSend.bind(this);
+    this.mostrarDetalhes = this.mostrarDetalhes.bind(this);
   }
 
   componentWillMount() {
@@ -56,11 +58,10 @@ export default class PerguntaShow extends Component {
             monitor: this.state.emailMonitor,
             titulo: this.state.titulo,
           }).then((doc) => {
-              //console.log('adicionado no vazio:', doc.id);
               firestore.collection('chats').doc(doc.id).collection('messages').add({
                 _id: 1,
                 createdAt: new Date(),
-                text: 'Início do chat',
+                text: this.state.titulo,
                 system: true,
               });
             }
@@ -71,7 +72,7 @@ export default class PerguntaShow extends Component {
           querySnap.forEach((doc) => {
             console.log(doc.id, '->', doc.data());
             this.setState({ messageId: doc.id });
-            var db = firestore.collection('chats').doc(doc.id).collection('messages');             
+            const db = firestore.collection('chats').doc(doc.id).collection('messages');             
               db.onSnapshot((snapshot) => {
                 snapshot.docChanges().forEach((change) => {                
                   if (change.type === 'added' && this.state.fetch === true) {
@@ -93,8 +94,8 @@ export default class PerguntaShow extends Component {
               (snap) => {
                 snap.forEach((vai) => {
                   //console.log(vai.id, '->', vai.data());
-                  var timestamp = vai.data().createdAt;    
-                  var date = new Date(timestamp.toDate());
+                  const timestamp = vai.data().createdAt;    
+                  const date = new Date(timestamp.toDate());
                   //console.log('data?', date);
                   const message = this.state.messages.concat({
                     _id: vai.id,
@@ -172,8 +173,8 @@ export default class PerguntaShow extends Component {
             (snap) => {
               snap.forEach((vai) => {
                 //console.log(vai.id, '->', vai.data());
-                var timestamp = vai.data().createdAt;    
-                var date = new Date(timestamp.toDate());
+                const timestamp = vai.data().createdAt;    
+                const date = new Date(timestamp.toDate());
                 if (vai.data().user_id == 0 || vai.data().user_id == 1) {
                   const message = this.state.messages.concat({
                     _id: vai.id,
@@ -200,6 +201,10 @@ export default class PerguntaShow extends Component {
     );
   }
 
+  mostrarDetalhes() {
+    Actions.PerguntaDetails({ materia: this.state.materia });
+  }
+
   render() {  
     if (!this.state.fetch) {
       return (
@@ -211,13 +216,8 @@ export default class PerguntaShow extends Component {
     //alert('oi');
     return (  
         <GiftedChat placeholder='Escreva sua mensagem...' messages={this.state.messages} 
-        onSend={messages => this.onSend(messages)} user={{ _id: this.state.userId }} 
+        onSend={messages => this.onSend(messages)} user={{ _id: this.state.userId }}
         />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  
-  
-});
