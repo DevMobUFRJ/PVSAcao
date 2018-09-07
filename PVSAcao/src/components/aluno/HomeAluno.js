@@ -195,7 +195,30 @@ export default class HomeAluno extends Component {
                     page={this.state.tabPage}
                     renderTabBar={() => <ScrollableTabBar />}
                 >
-                    <View style={perguntas} tabLabel='RESPONDIDAS'>
+                    <View style={perguntas} tabLabel='ATIVAS'>
+                        <SectionList
+                            sections={[
+                                { data: this.state.questionsW },
+                            ]}
+                            renderItem={({ item }) => (
+                                <View style={listRow}>
+                                    <TouchableOpacity
+                                        style={{ flex: 1 }} activeOpacity={0.5}
+                                        onPress={() => {
+                                            this.getMonitorEmail(item.titulo, item.materia);
+                                        }}
+                                    >
+                                        <View>
+                                            <Text style={perguntasI}>{item.titulo}</Text>
+                                            <Text style={materiasI}>{item.materia}</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                            )}
+                            keyExtractor={(item, index) => index}
+                        />
+                    </View>
+                    <View style={perguntas} tabLabel='RESOLVIDAS'>
                         <SectionList
                             sections={[
                                 { data: this.state.questionsA },
@@ -218,31 +241,6 @@ export default class HomeAluno extends Component {
                             keyExtractor={(item, index) => index}
                         />
                     </View>
-
-                    <View style={perguntas} tabLabel='AGUARDANDO'>
-                        <SectionList
-                            sections={[
-                                { data: this.state.questionsW },
-                            ]}
-                            renderItem={({ item }) => (
-                                <View style={listRow}>
-                                    <TouchableOpacity
-                                    style={{ flex: 1 }} activeOpacity={0.5} 
-                                    onPress={() => {
-                                        this.getMonitorEmail(item.titulo, item.materia);
-                                    }}
-                                    >
-                                        <View>
-                                            <Text style={perguntasI}>{item.titulo}</Text>
-                                            <Text style={materiasI}>{item.materia}</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>
-                            )}
-                            keyExtractor={(item, index) => index}
-                        />
-                    </View>
-
                 </ScrollableTabView>
                 <View style={novaPergunta}>
                     <TouchableOpacity

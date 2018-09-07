@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { GiftedChat, Actions } from 'react-native-gifted-chat';
 import keys from '../config/keys';
+import constantes from '../config/constants';
 
 const firebase = require('firebase');
 require('firebase/firestore');
@@ -39,7 +40,6 @@ export default class PerguntaShow extends Component {
       });
     }
 
-    console.log('id usuario é:', this.state.userId);
     this.setState({
       messages: [        
       ],
@@ -51,7 +51,6 @@ export default class PerguntaShow extends Component {
     t.get().then(
       (querySnap) => {
         if (querySnap.docs.length === 0) {
-          //console.log('vazio');
           firebase.firestore().collection('chats').add({
             aluno: this.state.emailAluno,
             materia: '', //add depois
@@ -68,7 +67,9 @@ export default class PerguntaShow extends Component {
           );  
           this.attMsgs();        
         } else {
-          console.log('Não vazio');
+          //Atualiza a constante "currentChat" para ser utilizada caso clique em "informações" da pergunta.
+          constantes.currentChat = querySnap.docs[0].data();
+
           querySnap.forEach((doc) => {
             console.log(doc.id, '->', doc.data());
             this.setState({ messageId: doc.id });
