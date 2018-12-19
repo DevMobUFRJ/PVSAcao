@@ -25,6 +25,7 @@ export default class Login extends Component {
         this.state = {email: '', password: '', isVisible: false};
 
         this.loginUser = this.loginUser.bind(this);
+        this.submitLoginForm = this.submitLoginForm.bind(this);
     }
 
     componentWillMount() {
@@ -51,6 +52,13 @@ export default class Login extends Component {
         });
     }
 
+    submitLoginForm(){
+        if (this.state.email === '') {
+            Alert.alert('Email vazio!');
+        } else {
+            this.loginUser();
+        }
+    }
 
     loginUser() {
         this.setState({isVisible: true});
@@ -127,12 +135,16 @@ export default class Login extends Component {
                         onChangeText={(e) => {
                             this.setState({ email: e });
                         }}
+                        onSubmitEditing={() => { this.secondTextInput.focus(); }}
+                        blurOnSubmit={false}
                     />
                     <TextInput 
                         style={TxtInput} placeholder="Senha" secureTextEntry
                         onChangeText={(s) => {
                             this.setState({ password: s });
                         }}
+                        ref={(input) => { this.secondTextInput = input; }}
+                        onSubmitEditing={() => { this.submitLoginForm(); }}
                     />
                     <TouchableOpacity
                     activeOpacity={0.9}
@@ -163,11 +175,7 @@ export default class Login extends Component {
                     style={botao}
                     onPress={
                         () => {
-                            if (this.state.email === '') {
-                                Alert.alert('Email vazio!');
-                            } else {
-                                this.loginUser();
-                            }
+                            this.submitLoginForm();
                         }
                     }
                 >
