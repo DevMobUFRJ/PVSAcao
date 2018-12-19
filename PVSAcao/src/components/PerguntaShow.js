@@ -53,7 +53,7 @@ export default class PerguntaShow extends Component {
         if (querySnap.docs.length === 0) {
           firebase.firestore().collection('chats').add({
             aluno: this.state.emailAluno,
-            materia: '', //add depois
+            materia: this.state.materia,
             monitor: this.state.emailMonitor,
             titulo: this.state.titulo,
           }).then((doc) => {
@@ -61,7 +61,9 @@ export default class PerguntaShow extends Component {
                 _id: 1,
                 createdAt: new Date(),
                 text: this.state.titulo,
-                system: true,
+                user: {
+                  _id: 0,
+                },
               });
             }
           );  
@@ -69,6 +71,7 @@ export default class PerguntaShow extends Component {
         } else {
           //Atualiza a constante "currentChat" para ser utilizada caso clique em "informações" da pergunta.
           constantes.currentChat = querySnap.docs[0].data();
+          console.log(querySnap.docs[0].data());
 
           querySnap.forEach((doc) => {
             console.log(doc.id, '->', doc.data());
