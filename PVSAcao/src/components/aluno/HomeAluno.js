@@ -39,6 +39,7 @@ export default class HomeAluno extends Component {
         this.newQuestion = this.newQuestion.bind(this);
         this.attQuestions = this.attQuestions.bind(this);
         this.getMonitorEmail = this.getMonitorEmail.bind(this);
+        this.validateNewQuestion = this.validateNewQuestion.bind(this);
     }
 
     componentWillMount() {
@@ -71,6 +72,10 @@ export default class HomeAluno extends Component {
     }
 
     newQuestion() {
+        if(!this.validateNewQuestion()){
+            return;
+        }
+
         const firestore = firebase.firestore();
         firestore.settings({ timestampsInSnapshots: true });
         const ref = firestore.collection('perguntas');
@@ -91,6 +96,10 @@ export default class HomeAluno extends Component {
             });
         this.setState({ isVisible: false });
         this.attQuestions();
+    }
+
+    validateNewQuestion(){
+        return !(this.state.questionTitle.length < 2);
     }
 
     attQuestions() {
@@ -140,26 +149,21 @@ export default class HomeAluno extends Component {
                 </View>
             );
         }
-        const { principal, perguntas, novaPergunta, txtBotao, botao, perguntasI, listRow, materiasI, modalTexts, modalInput, modalButtons, containerButtons } = styles;
+        const { principal, perguntas, novaPergunta, txtBotao, botao, perguntasI, listRow, materiasI, modalTexts, modalWrapper, modalInput, modalButtons, containerButtons } = styles;
         return (
             <View style={principal}>
                 <Modal isVisible={this.state.isVisible} animationInTiming={300}>
-                    <View
-                        style={{
-                            justifyContent: 'center',
-                            alignContent: 'center',
-                            backgroundColor: 'white',
-                            height: 250
-                        }}
-                    >
+                    <View style={modalWrapper} >
                         <View style={modalTexts}>
+                            <Text>Pergunta</Text>
                             <TextInput
                                 style={modalInput}
-                                placeholder='Titulo da pergunta'
+                                placeholder='Digite sua dúvida...'
                                 onChangeText={(t) => {
                                     this.setState({ questionTitle: t });
                                 }}
                             />
+                            <Text>Disciplina</Text>
                             <Picker
                                 style={modalInput}
                                 mode='dropdown'
@@ -261,6 +265,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
 
+    modalTexts: {
+    },
+
     perguntas: {
         flex: 10,
         marginTop: 5,
@@ -310,22 +317,34 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+        flex: 1
     },
 
     modalButtons: {
-        margin: 10,
+        margin: 5,
+        padding: 3,
         backgroundColor: '#616EB2',
         borderRadius: 2,
         alignItems: 'center',
         justifyContent: 'center',
         height: 30,
         width: 80,
+        flex: 1,
     },
 
     modalInput: {
         marginBottom: 10,
-        marginLeft: 20,
-        marginRight: 20,
     },
+
+    modalWrapper: {
+        paddingTop: 10,
+        paddingLeft: 15,
+        paddingRight: 15,
+        paddingBottom: 8,
+        justifyContent: 'center',
+        alignContent: 'center',
+        backgroundColor: 'white',
+        height: 230,
+    }
 
 });
