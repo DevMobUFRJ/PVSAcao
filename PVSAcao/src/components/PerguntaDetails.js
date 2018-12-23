@@ -18,11 +18,16 @@ export default class PerguntaDetails extends Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            chat: constantes.currentChat,
+            aluno: '',
+            monitor: '',
+        };
     }
 
 
     componentWillMount() {
-
         if (!firebase.apps.length) {
             firebase.initializeApp({
                 apiKey: keys.REACT_APP_PVS_FIREBASE_API_KEY,
@@ -32,32 +37,30 @@ export default class PerguntaDetails extends Component {
                 storageBucket: 'pvs-acao.appspot.com',
                 messagingSenderId: keys.REACT_APP_PVS_FIREBASE_SENDER_ID
             });
-        }
-
-        this.state = {
-            chat: constantes.currentChat,
-            aluno: "",
-            monitor: ""
-        };
+        }        
 
         const firestore = firebase.firestore();
         firestore.settings({ timestampsInSnapshots: true });
 
         firestore.collection('usuarios').doc(this.state.chat.aluno).get().then(
             (doc) => {
-                if(doc.exists){
+                if (doc.exists) {
                     this.setState({ aluno: doc.data() });
                 }
             }
         );
 
-        firestore.collection('usuarios').doc(this.state.chat.monitor).get().then(
-            (doc) => {
-                if(doc.exists){
-                    this.setState({ monitor: doc.data() });
+        if (this.state.chat.monitor !== "") {
+            firestore.collection('usuarios').doc(this.state.chat.monitor).get().then(
+                (doc) => {
+                    if (doc.exists) {
+                        this.setState({ monitor: doc.data() });
+                    }
                 }
-            }
-        );
+            );
+        } else {
+            this.setState({ monitor: 'Sem monitor' });
+        }
     }
 
     duvidaSolucionada() {
@@ -80,12 +83,12 @@ export default class PerguntaDetails extends Component {
                 <View style={aluno}>
                     <Text>Aluno</Text>
                     <View style={nomeA}>
-                        <Image source={alunoI} style={icons}/>
+                        <Image source={alunoI} style={icons} />
                         <Text style={textos}>{ this.state.aluno.nome }</Text>
                     </View>
 
                     <View style={nomeA}>
-                        <Image source={turmaI} style={icons}/>
+                        <Image source={turmaI} style={icons} />
                         <Text style={textos}>Turma { this.state.aluno.turma }</Text>
                     </View>
                 </View>
@@ -93,23 +96,25 @@ export default class PerguntaDetails extends Component {
                 <View style={monitor}>
                     <Text>Monitor</Text>
                     <View style={monitorA}>
-                        <Image source={monitorI} style={icons}/>
+                        <Image source={monitorI} style={icons} />
                         <Text style={textos}>{ this.state.monitor.nome } </Text>
                     </View>
                 </View>
 
                 <View style={monitor}>
-                    <Text style={{fontSize: 16}}>Pergunta: { this.state.chat.titulo }</Text>
+                    <Text style={{ fontSize: 16 }}>Pergunta: { this.state.chat.titulo }</Text>
+                    <Text style={{ fontSize: 16 }}>Matéria: { this.state.chat.materia }</Text>
                 </View>
 
-                <Text style={{alignSelf: 'center', fontWeight: 'bold', color: 'black', marginBottom: 20, fontSize: 16}}>
+                <Text style={{ alignSelf: 'center', fontWeight: 'bold', color: 'black', marginBottom: 20, fontSize: 16 }}>
                     A dúvida já foi solucionada?</Text>
 
                 <View style={botoes}>
                     <TouchableOpacity
                         activeOpacity={0.6}
                         style={botaoS}
-                        onPress={() => this.duvidaSolucionada()}>
+                        onPress={() => this.duvidaSolucionada()}
+                    >
                         <Text style={textosB}>SIM</Text>
                     </TouchableOpacity>
                 </View>
@@ -130,7 +135,6 @@ const styles = StyleSheet.create({
 
     aluno: {
         margin: 10,
-        lineHeight: 30,
         borderBottomColor: '#9BAAAD',
         borderBottomWidth: 1,
         paddingBottom: 10

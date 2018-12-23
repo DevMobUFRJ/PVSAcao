@@ -68,7 +68,7 @@ export default class HomeAluno extends Component {
                 this.setState({ emailMontitor: doc.data().monitor });
             });
         });
-        Actions.perguntashow({ title: titulo, materia, emailAluno: this.state.email, emailMonitor: this.state.emailMontitor, userId: 0 });
+        Actions.perguntashow({ title: titulo, materia: this.state.questionClass, emailAluno: this.state.email, emailMonitor: this.state.emailMontitor, userId: 0 });
     }
 
     newQuestion() {
