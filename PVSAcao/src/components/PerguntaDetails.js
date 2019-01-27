@@ -4,8 +4,9 @@ import {
     Text,
     View,
     Image,
-    TouchableOpacity,
+    TouchableOpacity, Alert,
 } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 import constantes from '../config/constants';
 import keys from '../config/keys';
 
@@ -20,7 +21,7 @@ export default class PerguntaDetails extends Component {
         super(props);
 
         this.state = {
-            chat: constantes.currentChat,
+            chat: constantes.currentChat.data(),
             aluno: '',
             monitor: '',
         };
@@ -63,20 +64,60 @@ export default class PerguntaDetails extends Component {
     }
 
     duvidaSolucionada() {
-        // const firestore = firebase.firestore();
-
-        // firestore.collection('chats')
-        //     .where('aluno', '==', this.state.chat.aluno)
-        //     .where('titulo', '==', this.state.chat.titulo)
-        //     .where('monitor', '==', this.state.chat.monitor)
-        //     .get()
-        //     .then();
+        constantes.currentPergunta.ref.update({ respondida: true });
+        constantes.currentChat.ref.update({ respondida: true });
+        Alert.alert('Sucesso', 'Pergunta resolvida!',
+    [{ text: 'OK',
+            onPress: () => {
+                Actions.pop();
+                Actions.pop();
+            } }, {}, {}],
+            { cancelable: false }
+        );
     }
 
 
     render() {
-        const { container, aluno, nomeA, monitor, textos, botoes, botaoS, botaoN, textosB,
+        const { container, aluno, nomeA, monitor, textos, botoes, botaoS, textosB,
             icons, monitorA } = styles;
+
+        let perguntaRespondidaJsx = '';
+
+        if(constantes.currentPergunta.data().respondida){
+            perguntaRespondidaJsx =
+                <View>
+                    <Text
+                        style={{ alignSelf: 'center',
+                            fontWeight: 'bold',
+                            color: 'black',
+                            marginBottom: 20,
+                            fontSize: 16 }}
+                    >
+                        Dúvida solucionada!</Text>
+                </View>;
+        } else {
+            perguntaRespondidaJsx =
+                <View>
+                    <Text
+                        style={{ alignSelf: 'center',
+                            fontWeight: 'bold',
+                            color: 'black',
+                            marginBottom: 20,
+                            fontSize: 16 }}
+                        >
+                            A dúvida já foi solucionada?</Text>
+                        <View style={botoes}>
+                        <TouchableOpacity
+                            activeOpacity={0.6}
+                            style={botaoS}
+                            onPress={() => this.duvidaSolucionada()}
+                        >
+                            <Text style={textosB}>SIM</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>;
+        }
+
         return (
             <View style={container}>
                 <View style={aluno}>
@@ -105,25 +146,7 @@ export default class PerguntaDetails extends Component {
                     <Text style={{ fontSize: 16 }}>Matéria: { this.state.chat.materia }</Text>
                 </View>
 
-                <Text
-                    style={{ alignSelf: 'center',
-                        fontWeight: 'bold',
-                        color: 'black',
-                        marginBottom: 20,
-                        fontSize: 16 }}
-                >
-                    A dúvida já foi solucionada?</Text>
-
-                <View style={botoes}>
-                    <TouchableOpacity
-                        activeOpacity={0.6}
-                        style={botaoS}
-                        onPress={() => this.duvidaSolucionada()}
-                    >
-                        <Text style={textosB}>SIM</Text>
-                    </TouchableOpacity>
-                </View>
-
+                {perguntaRespondidaJsx}
             </View>
 
         );
@@ -140,7 +163,7 @@ const styles = StyleSheet.create({
 
     aluno: {
         margin: 10,
-        borderBottomColor: '#9BAAAD',
+        borderBottomColor: '#d9dbde',
         borderBottomWidth: 1,
         paddingBottom: 10
     },
@@ -178,15 +201,6 @@ const styles = StyleSheet.create({
         width: 100,
         marginRight: 5,
         backgroundColor: '#55C24A',
-    },
-
-    botaoN: {
-        borderRadius: 1,
-        justifyContent: 'center',
-        height: 30,
-        width: 100,
-        marginLeft: 5,
-        backgroundColor: '#FF4745',
     },
 
     textosB: {

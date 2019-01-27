@@ -10,6 +10,7 @@ import {
 import { Actions } from 'react-native-router-flux';
 import ScrollableTabView, { ScrollableTabBar, } from 'react-native-scrollable-tab-view';
 import keys from '../../config/keys';
+import constantes from '../../config/constants';
 
 const firebase = require('firebase');
 require('firebase/firestore');
@@ -42,7 +43,6 @@ export default class HomeMonitor extends Component {
             });
         }
 
-        console.log('Entrou no metodo!');
         const firestore = firebase.firestore();
         const ref = firestore.collection('perguntas');
         const queryUnanswered = ref.where('respondida', '==', false).where('materia', '==', this.state.materia);
@@ -51,26 +51,20 @@ export default class HomeMonitor extends Component {
         queryUnanswered.get().then(
             (querySnap) => {
                 querySnap.forEach((doc) => {
-                    console.log(doc.id, '=>', doc.data());
-                    const perguntaR = this.state.unansweredQuestions.concat(doc.data().titulo);
+                    const perguntaR = this.state.unansweredQuestions.concat(doc);
                     this.setState({ unansweredQuestions: perguntaR });
                 });
-                console.log(this.state.unansweredQuestions);
                 this.setState({ fetch: true });
-                console.log(this.state.fetch);
             }
         );
 
         queryAnswered.get().then(
             (querySnap) => {
                 querySnap.forEach((doc) => {
-                    console.log(doc.id, '=>', doc.data());
-                    const perguntaE = this.state.answeredQuestions.concat(doc.data().titulo);
+                    const perguntaE = this.state.answeredQuestions.concat(doc);
                     this.setState({ answeredQuestions: perguntaE });
                 });
-                console.log(this.state.answeredQuestions);
                 this.setState({ fetch: true });
-                console.log(this.state.fetch);
             }
         );
     }
@@ -84,14 +78,20 @@ export default class HomeMonitor extends Component {
                 (querySnap) => {
                     querySnap.forEach((doc) => {
                         this.setState({ perguntaAluno: doc.data().aluno });
-                        console.log('emailAluno:', this.state.perguntaAluno, 'titulo:', titulo);
-                        Actions.perguntashow({ title: titulo, emailMonitor: this.state.email, emailAluno: this.state.perguntaAluno, userId: 1 });
+                        Actions.perguntashow({ title: titulo,
+                            materia: this.state.materia,
+                            emailMonitor: this.state.email,
+                            emailAluno: this.state.perguntaAluno,
+                            userId: 1 });
                     });
                 }
             );            
         } else {
-            console.log('emailAluno:', this.state.perguntaAluno, 'titulo:', titulo);
-            Actions.perguntashow({ title: titulo, emailMonitor: this.state.email, emailAluno: this.state.perguntaAluno, userId: 1 });
+            Actions.perguntashow({ title: titulo,
+                emailMonitor: this.state.email,
+                materia: this.state.materia,
+                emailAluno: this.state.perguntaAluno,
+                userId: 1 });
         }      
     }
 
@@ -117,12 +117,13 @@ export default class HomeMonitor extends Component {
                                 <View style={listRow}>
                                     <TouchableOpacity
                                     activeOpacity={0.9} onPress={() => {
-                                        this.acharAluno(item);                                        
+                                        constantes.currentPergunta = item;
+                                        this.acharAluno(item.data().titulo);
                                     }}
                                     >
                                         <View>
-                                            <Text style={perguntasI}>{item}</Text>
-                                            <Text style={materiasI}>Matéria</Text>
+                                            <Text style={perguntasI}>{item.data().titulo}</Text>
+                                            <Text style={materiasI}>{item.data().materia}</Text>
                                         </View>
                                     </TouchableOpacity>
                                 </View>
@@ -140,12 +141,13 @@ export default class HomeMonitor extends Component {
                                 <View style={listRow}>
                                     <TouchableOpacity
                                     activeOpacity={0.9} onPress={() => {
-                                        this.acharAluno(item);
+                                        constantes.currentPergunta = item;
+                                        this.acharAluno(item.data().titulo);
                                     }}
                                     >
                                         <View>
-                                            <Text style={perguntasI}>{item}</Text>
-                                            <Text style={materiasI}>Matéria</Text>
+                                            <Text style={perguntasI}>{item.data().titulo}</Text>
+                                            <Text style={materiasI}>{item.data().materia}</Text>
                                         </View>
                                     </TouchableOpacity>
                                 </View>

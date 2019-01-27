@@ -11,7 +11,7 @@ import {
     Picker
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import ScrollableTabView, { ScrollableTabBar,  } from 'react-native-scrollable-tab-view';
+import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
 import Modal from 'react-native-modal';
 import keys from '../../config/keys';
 import constantes from '../../config/constants';
@@ -20,7 +20,6 @@ const firebase = require('firebase');
 require('firebase/firestore');
 
 export default class HomeAluno extends Component {
-
     constructor(props) {
         super(props);
 
@@ -53,8 +52,6 @@ export default class HomeAluno extends Component {
                 messagingSenderId: keys.REACT_APP_PVS_FIREBASE_SENDER_ID
             });
         }
-        console.log('Entrou no metodo!');
-        console.log('email do aluno é:', this.state.email);
         this.attQuestions();
     }  
 
@@ -67,11 +64,15 @@ export default class HomeAluno extends Component {
                 this.setState({ emailMontitor: doc.data().monitor });
             });
         });
-        Actions.perguntashow({ title: titulo, materia: this.state.questionClass, emailAluno: this.state.email, emailMonitor: this.state.emailMontitor, userId: 0 });
+        Actions.perguntashow({ title: titulo,
+            materia: this.state.questionClass,
+            emailAluno: this.state.email,
+            emailMonitor: this.state.emailMontitor,
+            userId: 0 });
     }
 
     newQuestion() {
-        if(!this.validateNewQuestion()){
+        if (!this.validateNewQuestion()) {
             return;
         }
 
@@ -85,7 +86,6 @@ export default class HomeAluno extends Component {
             titulo: this.state.questionTitle,
         })
             .then((doc) => {
-                console.log('Adicionada pergunta com id:', doc.id);
                 Alert.alert('Pergunta adicionada!');
                 this.setState({ tabPage: 1 });
             })
@@ -96,14 +96,14 @@ export default class HomeAluno extends Component {
         this.attQuestions();
     }
 
-    validateNewQuestion(){
+    validateNewQuestion() {
         return !(this.state.questionTitle.length < 2);
     }
 
     attQuestions() {
         this.setState({ questionsA: [] });
         this.setState({ questionsW: [] });
-        console.log('Iniciou a att das perguntas!');
+
         const firestore = firebase.firestore();
         const ref = firestore.collection('perguntas');
         const queryA = ref.where('aluno', '==', this.state.email).where('respondida', '==', true);
@@ -112,33 +112,26 @@ export default class HomeAluno extends Component {
         queryA.get().then(
             (querySnap) => {
                 querySnap.forEach((doc) => {
-                    console.log(doc.id, '=>', doc.data());
-                    const perguntaR = this.state.questionsA.concat(doc.data());
+                    const perguntaR = this.state.questionsA.concat(doc);
                     this.setState({ questionsA: perguntaR });
                 });
-                console.log(this.state.questionsA);
                 this.setState({ fetch: true });
-                console.log(this.state.fetch);
             }
         );
 
         queryB.get().then(
             (querySnap) => {
                 querySnap.forEach((doc) => {
-                    console.log(doc.id, '=>', doc.data());
-                    const perguntaE = this.state.questionsW.concat(doc.data());
+                    const perguntaE = this.state.questionsW.concat(doc);
                     this.setState({ questionsW: perguntaE });
                 });
-                console.log(this.state.questionsW);
                 this.setState({ fetch: true });
-                console.log(this.state.fetch);
             }
         );
     }
 
 
     render() {
-        console.log('render chamado');
         if (!this.state.fetch) {
             return (
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -146,7 +139,8 @@ export default class HomeAluno extends Component {
                 </View>
             );
         }
-        const { principal, perguntas, novaPergunta, txtBotao, botao, perguntasI, listRow, materiasI, modalTexts, modalWrapper, modalInput, modalButtons, containerButtons } = styles;
+        const { principal, perguntas, novaPergunta, txtBotao, botao, perguntasI, listRow, materiasI,
+            modalTexts, modalWrapper, modalInput, modalButtons, containerButtons } = styles;
         return (
             <View style={principal}>
                 <Modal isVisible={this.state.isVisible} animationInTiming={300}>
@@ -206,12 +200,14 @@ export default class HomeAluno extends Component {
                                     <TouchableOpacity
                                         style={{ flex: 1 }} activeOpacity={0.5}
                                         onPress={() => {
-                                            this.getMonitorEmail(item.titulo, item.materia);
+                                            constantes.currentPergunta = item;
+                                            this.getMonitorEmail(item.data().titulo,
+                                                item.data().materia);
                                         }}
                                     >
                                         <View>
-                                            <Text style={perguntasI}>{item.titulo}</Text>
-                                            <Text style={materiasI}>{item.materia}</Text>
+                                            <Text style={perguntasI}>{item.data().titulo}</Text>
+                                            <Text style={materiasI}>{item.data().materia}</Text>
                                         </View>
                                     </TouchableOpacity>
                                 </View>
@@ -229,12 +225,14 @@ export default class HomeAluno extends Component {
                                     <TouchableOpacity
                                     style={{ flex: 1 }} activeOpacity={0.5} 
                                     onPress={() => {
-                                        this.getMonitorEmail(item.titulo, item.materia);
+                                        constantes.currentPergunta = item;
+                                        this.getMonitorEmail(item.data().titulo,
+                                            item.data().materia);
                                     }}
                                     >
                                         <View>
-                                            <Text style={perguntasI}>{item.titulo}</Text>
-                                            <Text style={materiasI}>{item.materia}</Text>
+                                            <Text style={perguntasI}>{item.data().titulo}</Text>
+                                            <Text style={materiasI}>{item.data().materia}</Text>
                                         </View>
                                     </TouchableOpacity>
                                 </View>

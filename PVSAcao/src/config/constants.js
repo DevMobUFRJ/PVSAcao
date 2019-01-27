@@ -10,5 +10,6 @@ export default constantes = {
         { nome: 'Física', value: 'fisica' },
         { nome: 'Química', value: 'quimica' }
     ],
-    currentChat: "",
+    currentChat: '',
+    currentPergunta: '',
 };
