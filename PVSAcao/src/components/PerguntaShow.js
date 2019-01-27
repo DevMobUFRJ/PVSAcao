@@ -46,7 +46,6 @@ export default class PerguntaShow extends Component {
     });
 
     const firestore = firebase.firestore();
-    firestore.settings({ timestampsInSnapshots: true });
     const t = firestore.collection('chats').where('aluno', '==', this.state.emailAluno).where('titulo', '==', this.state.titulo);
     t.get().then(
       (querySnap) => {

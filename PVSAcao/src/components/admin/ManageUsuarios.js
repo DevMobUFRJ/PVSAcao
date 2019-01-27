@@ -54,7 +54,6 @@ export default class ManageUsuarios extends Component {
         this.setState({ users: [] });
         console.log('Pegando usuarios');
         const firestore = firebase.firestore();
-        firestore.settings({ timestampsInSnapshots: true });
         const ref = firestore.collection('usuarios');
         const queryUsers = ref.where('tipo', '==', this.state.userType);
 
@@ -71,7 +70,6 @@ export default class ManageUsuarios extends Component {
     removeAllUsers() {
         console.log('Deletando todos os usuarios do tipo: ', this.state.userType);
         const firestore = firebase.firestore();
-        firestore.settings({ timestampsInSnapshots: true });
         const ref = firestore.collection('usuarios');
         const queryUsers = ref.where('tipo', '==', this.state.userType);
 

@@ -60,7 +60,6 @@ export default class HomeAluno extends Component {
 
     getMonitorEmail(titulo, materia) {
         const firestore = firebase.firestore();
-        firestore.settings({ timestampsInSnapshots: true });
         const ref = firestore.collection('perguntas');
         const queryA = ref.where('aluno', '==', this.state.email).where('titulo', '==', titulo);
         queryA.get().then((querySnap) => {
@@ -77,7 +76,6 @@ export default class HomeAluno extends Component {
         }
 
         const firestore = firebase.firestore();
-        firestore.settings({ timestampsInSnapshots: true });
         const ref = firestore.collection('perguntas');
         ref.add({
             aluno: this.state.email,
@@ -107,7 +105,6 @@ export default class HomeAluno extends Component {
         this.setState({ questionsW: [] });
         console.log('Iniciou a att das perguntas!');
         const firestore = firebase.firestore();
-        firestore.settings({ timestampsInSnapshots: true });
         const ref = firestore.collection('perguntas');
         const queryA = ref.where('aluno', '==', this.state.email).where('respondida', '==', true);
         const queryB = ref.where('aluno', '==', this.state.email).where('respondida', '==', false);

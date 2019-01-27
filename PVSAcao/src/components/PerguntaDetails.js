@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     StyleSheet,
     Text,
@@ -7,7 +7,8 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import constantes from '../config/constants';
-import keys from "../config/keys";
+import keys from '../config/keys';
+
 const alunoI = require('../imgs/icons/ic_people_black_24dp.png');
 const turmaI = require('../imgs/icons/ic_school_black_24dp.png');
 const monitorI = require('../imgs/icons/ic_person_black_24dp.png');
@@ -15,7 +16,6 @@ const firebase = require('firebase');
 require('firebase/firestore');
 
 export default class PerguntaDetails extends Component {
-
     constructor(props) {
         super(props);
 
@@ -40,7 +40,6 @@ export default class PerguntaDetails extends Component {
         }        
 
         const firestore = firebase.firestore();
-        firestore.settings({ timestampsInSnapshots: true });
 
         firestore.collection('usuarios').doc(this.state.chat.aluno).get().then(
             (doc) => {
@@ -50,7 +49,7 @@ export default class PerguntaDetails extends Component {
             }
         );
 
-        if (this.state.chat.monitor !== "") {
+        if (this.state.chat.monitor !== '') {
             firestore.collection('usuarios').doc(this.state.chat.monitor).get().then(
                 (doc) => {
                     if (doc.exists) {
@@ -65,7 +64,6 @@ export default class PerguntaDetails extends Component {
 
     duvidaSolucionada() {
         // const firestore = firebase.firestore();
-        // firestore.settings({ timestampsInSnapshots: true });
 
         // firestore.collection('chats')
         //     .where('aluno', '==', this.state.chat.aluno)
@@ -77,7 +75,8 @@ export default class PerguntaDetails extends Component {
 
 
     render() {
-        const {container, aluno, nomeA, monitor, textos, botoes, botaoS, botaoN, textosB, icons, monitorA} = styles;
+        const { container, aluno, nomeA, monitor, textos, botoes, botaoS, botaoN, textosB,
+            icons, monitorA } = styles;
         return (
             <View style={container}>
                 <View style={aluno}>
@@ -106,7 +105,13 @@ export default class PerguntaDetails extends Component {
                     <Text style={{ fontSize: 16 }}>Matéria: { this.state.chat.materia }</Text>
                 </View>
 
-                <Text style={{ alignSelf: 'center', fontWeight: 'bold', color: 'black', marginBottom: 20, fontSize: 16 }}>
+                <Text
+                    style={{ alignSelf: 'center',
+                        fontWeight: 'bold',
+                        color: 'black',
+                        marginBottom: 20,
+                        fontSize: 16 }}
+                >
                     A dúvida já foi solucionada?</Text>
 
                 <View style={botoes}>

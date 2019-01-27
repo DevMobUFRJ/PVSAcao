@@ -47,7 +47,6 @@ export default class ManagePerguntas extends Component {
     getPerguntas() {
         console.log('Pegando perguntas');
         const firestore = firebase.firestore();
-        firestore.settings({ timestampsInSnapshots: true });
         const ref = firestore.collection('perguntas');
 
         ref.get().then(
@@ -72,7 +71,6 @@ export default class ManagePerguntas extends Component {
         this.setState({ fetch: false });
         console.log('Deletando todas as perguntas');
         const firestore = firebase.firestore();
-        firestore.settings({ timestampsInSnapshots: true });
         const ref = firestore.collection('perguntas');
 
         ref.get().then(

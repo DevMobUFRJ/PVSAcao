@@ -53,7 +53,6 @@ export default class DeletarUsuario extends Component {
     removeUser() {
         console.log('Deletando o usuario!');
         const firestore = firebase.firestore();
-        firestore.settings({ timestampsInSnapshots: true });
         const ref = firestore.collection('usuarios');
         const queryUsers = ref.where('tipo', '==', this.state.userType).where('nome', '==', this.state.nome);
 
@@ -75,7 +74,6 @@ export default class DeletarUsuario extends Component {
     atualizarUsuario() {
         console.log('Atualizando o usuario!');
         const firestore = firebase.firestore();
-        firestore.settings({ timestampsInSnapshots: true });
         const ref = firestore.collection('usuarios');
         const queryUsers = ref.where('tipo', '==', this.state.userType);
 

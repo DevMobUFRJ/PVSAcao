@@ -82,7 +82,6 @@ export default class Login extends Component {
 
     loginFinalStep(email) {
         const firestore = firebase.firestore();
-        firestore.settings({timestampsInSnapshots: true});
         var db = firestore.collection('usuarios').doc(email);
         var msgErro = '';
 
