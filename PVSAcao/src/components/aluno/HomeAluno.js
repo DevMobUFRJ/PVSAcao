@@ -53,7 +53,7 @@ export default class HomeAluno extends Component {
             });
         }
         this.attQuestions();
-    }  
+    }
 
     getMonitorEmail(titulo, materia) {
         const firestore = firebase.firestore();
@@ -87,7 +87,7 @@ export default class HomeAluno extends Component {
         })
             .then((doc) => {
                 Alert.alert('Pergunta adicionada!');
-                this.setState({ tabPage: 1 });
+                this.setState({ tabPage: 0 });
             })
             .catch((error) => {
                 console.error('Erro ao adicionar pergunta:', error);

@@ -82,10 +82,10 @@ export default class PerguntaShow extends Component {
                     }
                   }
                   if (change.type === 'modified') {
-                    console.log('Modificado:', change.doc.data());
+                    //console.log('Modificado:', change.doc.data());
                   }
                   if (change.type === 'removed') {
-                    console.log('Removido:', change.doc.data());
+                    //console.log('Removido:', change.doc.data());
                   }
                 });
               });                      
@@ -127,7 +127,8 @@ export default class PerguntaShow extends Component {
         createdAt: element.createdAt,
       })
       .then((doc) => {
-        console.log('adicionada mensagem com id', doc.id);
+        //Sucesso
+        //console.log('adicionada mensagem com id', doc.id);
       });
     });
   }
