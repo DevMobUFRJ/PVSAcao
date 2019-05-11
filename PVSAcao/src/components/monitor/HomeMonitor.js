@@ -108,7 +108,7 @@ export default class HomeMonitor extends Component {
             <View style={principal}>
                 <ScrollableTabView renderTabBar={() => <ScrollableTabBar />}>
 
-                    <View style={perguntas} tabLabel='AGUARDANDO RESPOSTA'>
+                    <View style={perguntas} tabLabel='ATIVAS'>
                         <SectionList
                             sections={[
                                 { data: this.state.unansweredQuestions },
@@ -132,7 +132,7 @@ export default class HomeMonitor extends Component {
                         />
                     </View>
 
-                    <View style={perguntas} tabLabel='RESPONDIDAS'>
+                    <View style={perguntas} tabLabel='SOLUCIONADAS'>
                         <SectionList
                             sections={[
                                 { data: this.state.answeredQuestions },

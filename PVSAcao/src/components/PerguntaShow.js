@@ -129,7 +129,7 @@ export default class PerguntaShow extends Component {
       .then((doc) => {
         console.log('adicionada mensagem com id', doc.id);
       });
-    });    
+    });
   }
 
   onReceive(text) {
@@ -206,8 +206,12 @@ export default class PerguntaShow extends Component {
       );
   }
     return (  
-        <GiftedChat placeholder='Escreva sua mensagem...' messages={this.state.messages} 
-        onSend={messages => this.onSend(messages)} user={{ _id: this.state.userId }}
+        <GiftedChat
+            placeholder='Escreva sua mensagem...'
+            messages={this.state.messages}
+            renderAvatar={null}
+            onSend={messages => this.onSend(messages)}
+            user={{ _id: this.state.userId }}
         />
     );
   }

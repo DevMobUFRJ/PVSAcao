@@ -78,7 +78,7 @@ export default class PerguntaDetails extends Component {
 
 
     render() {
-        const { container, aluno, nomeA, monitor, textos, botoes, botaoS, textosB,
+        const { container, aluno, nomeA, nomeB, monitor, textos, botoes, botaoS, textosB,
             icons, monitorA } = styles;
 
         let perguntaRespondidaJsx = '';
@@ -127,7 +127,7 @@ export default class PerguntaDetails extends Component {
                         <Text style={textos}>{ this.state.aluno.nome }</Text>
                     </View>
 
-                    <View style={nomeA}>
+                    <View style={nomeB}>
                         <Image source={turmaI} style={icons} />
                         <Text style={textos}>Turma { this.state.aluno.turma }</Text>
                     </View>
@@ -137,7 +137,9 @@ export default class PerguntaDetails extends Component {
                     <Text>Monitor</Text>
                     <View style={monitorA}>
                         <Image source={monitorI} style={icons} />
-                        <Text style={textos}>{ this.state.monitor.nome } </Text>
+                        <Text style={textos}>
+                            { this.state.monitor.nome ? this.state.monitor.nome : '(não atribuído)' }
+                        </Text>
                     </View>
                 </View>
 
@@ -158,18 +160,22 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#FFF',
         alignContent: 'center',
-        justifyContent: 'center',
     },
 
     aluno: {
         margin: 10,
         borderBottomColor: '#d9dbde',
-        borderBottomWidth: 1,
-        paddingBottom: 10
+        borderBottomWidth: 1
     },
 
     nomeA: {
         marginTop: 10,
+        flexDirection: 'row',
+    },
+
+    nomeB: {
+        marginTop: 10,
+        marginBottom: 10,
         flexDirection: 'row',
     },
 

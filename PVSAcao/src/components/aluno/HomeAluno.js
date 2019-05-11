@@ -215,7 +215,7 @@ export default class HomeAluno extends Component {
                             keyExtractor={(item, index) => index}
                         />
                     </View>
-                    <View style={perguntas} tabLabel='RESOLVIDAS'>
+                    <View style={perguntas} tabLabel='SOLUCIONADAS'>
                         <SectionList
                             sections={[
                                 { data: this.state.questionsA },
