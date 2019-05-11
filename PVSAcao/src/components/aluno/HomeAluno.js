@@ -33,7 +33,7 @@ export default class HomeAluno extends Component {
             questionTitle: '',
             questionClass: 'biologia',
             tabPage: 0,
-            emailMontitor: '',
+            emailMonitor: '',
         };
         this.newQuestion = this.newQuestion.bind(this);
         this.attQuestions = this.attQuestions.bind(this);
@@ -61,13 +61,13 @@ export default class HomeAluno extends Component {
         const queryA = ref.where('aluno', '==', this.state.email).where('titulo', '==', titulo);
         queryA.get().then((querySnap) => {
             querySnap.forEach((doc) => {
-                this.setState({ emailMontitor: doc.data().monitor });
+                this.setState({ emailMonitor: doc.data().monitor });
             });
         });
         Actions.perguntashow({ title: titulo,
             materia: this.state.questionClass,
             emailAluno: this.state.email,
-            emailMonitor: this.state.emailMontitor,
+            emailMonitor: this.state.emailMonitor,
             userId: 0 });
     }
 
@@ -223,7 +223,7 @@ export default class HomeAluno extends Component {
                             renderItem={({ item }) => (
                                 <View style={listRow}>
                                     <TouchableOpacity
-                                    style={{ flex: 1 }} activeOpacity={0.5} 
+                                    style={{ flex: 1 }} activeOpacity={0.5}
                                     onPress={() => {
                                         constantes.currentPergunta = item;
                                         this.getMonitorEmail(item.data().titulo,

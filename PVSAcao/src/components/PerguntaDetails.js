@@ -138,7 +138,7 @@ export default class PerguntaDetails extends Component {
                     <View style={monitorA}>
                         <Image source={monitorI} style={icons} />
                         <Text style={textos}>
-                            { this.state.monitor.nome ? this.state.monitor.nome : '(não atribuído)' }
+                            { this.state.monitor.nome }
                         </Text>
                     </View>
                 </View>

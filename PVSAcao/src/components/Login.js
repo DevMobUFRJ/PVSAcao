@@ -116,7 +116,7 @@ export default class Login extends Component {
     }
 
     render() {
-        const {container, img, texto, VLogo, Cdados, TxtInput, botao, Txtbotao, txtEsqSenha, devmob } = styles;
+        const {container, img, texto, VLogo, Cdados, botao, inputSenha, Txtbotao, txtEsqSenha, devmob } = styles;
         return (
             <View style={container}>
                 <Modal isVisible={this.state.isVisible} animationInTiming={1}>
@@ -132,7 +132,7 @@ export default class Login extends Component {
 
                 <View style={Cdados}>
                     <TextInput 
-                        style={TxtInput} placeholder="Email" keyboardType='email-address' autoFocus
+                        placeholder="Email" keyboardType='email-address' autoFocus
                         onChangeText={(e) => {
                             this.setState({ email: e });
                         }}
@@ -140,7 +140,7 @@ export default class Login extends Component {
                         blurOnSubmit={false}
                     />
                     <TextInput 
-                        style={TxtInput} placeholder="Senha" secureTextEntry
+                        style={inputSenha} placeholder="Senha" secureTextEntry
                         onChangeText={(s) => {
                             this.setState({ password: s });
                         }}
@@ -167,7 +167,7 @@ export default class Login extends Component {
                             }
                         }
                     >
-                    <Text style={[Txtbotao, { color: 'black' }]}>Esqueci a senha</Text>
+                    <Text style={[Txtbotao, { color: '#656565' }]}>Esqueci a senha</Text>
                 </TouchableOpacity>
                 </View>                
 
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
 
     Cdados: {
         margin: 30,
-        marginBottom: 100,
+        marginBottom: 60,
     },
 
     VLogo: {
@@ -237,10 +237,17 @@ const styles = StyleSheet.create({
     txtEsqSenha: {
         justifyContent: 'center',
         alignItems: 'flex-end',
+        marginTop: -10,
+        marginBottom: 0,
     },
 
     devmob: {
         fontSize: 13,
         marginTop: 4,
     },
+
+    inputSenha: {
+        marginTop: 0,
+        marginBottom: 0,
+    }
 });
