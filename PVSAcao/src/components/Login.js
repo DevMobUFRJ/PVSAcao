@@ -7,7 +7,8 @@ import {
     TextInput,
     TouchableOpacity,
     ActivityIndicator,
-    Alert
+    Alert,
+    Linking
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Modal from 'react-native-modal';
@@ -115,7 +116,7 @@ export default class Login extends Component {
     }
 
     render() {
-        const {container, img, texto, VLogo, Cdados, TxtInput, botao, Txtbotao, txtEsqSenha } = styles;
+        const {container, img, texto, VLogo, Cdados, TxtInput, botao, Txtbotao, txtEsqSenha, devmob } = styles;
         return (
             <View style={container}>
                 <Modal isVisible={this.state.isVisible} animationInTiming={1}>
@@ -126,6 +127,7 @@ export default class Login extends Component {
                 <View style={VLogo}>
                     <Image style={img} source={logo} />
                     <Text style={texto}>Pré Vestibular Social</Text>
+                    <Text style={devmob} onPress={ ()=>{ Linking.openURL('https://facebook.com/DevMobUFRJ/')} }>App desenvolvido por <Text style={{ textDecorationLine: 'underline' }}>DevMob UFRJ</Text></Text>
                 </View>
 
                 <View style={Cdados}>
@@ -214,7 +216,7 @@ const styles = StyleSheet.create({
     texto: {
         marginTop: -30,
         color: 'black',
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: 'bold',
     },
 
@@ -235,6 +237,10 @@ const styles = StyleSheet.create({
     txtEsqSenha: {
         justifyContent: 'center',
         alignItems: 'flex-end',
-    }
+    },
 
+    devmob: {
+        fontSize: 13,
+        marginTop: 4,
+    },
 });
